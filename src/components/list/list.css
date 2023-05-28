@@ -1,0 +1,8 @@
+.list .list-group-item {
+  background: linear-gradient(71deg, #080509, #1d2134, #080509);
+  padding: .25rem .75rem;
+}
+
+body {
+  background-color: black;
+}

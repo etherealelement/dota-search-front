@@ -1,0 +1,27 @@
+.list-item {
+  font-size: 1.25rem;
+}
+.float-right{
+  float: right;
+}
+
+.list-item button {
+  width: 35px;
+  margin: 3px;
+}
+
+.list-item .selected .list-item-label {
+  text-decoration: line-through;
+}
+
+.list-item .important .list-item-label {
+  font-weight: bold;
+  color: steelblue;
+}
+.link-success {
+  text-align: right;
+}
+
+.time {
+  text-align: right;
+}
