@@ -1,8 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400&display=swap");
+
+body {
+  letter-spacing: 0.8px;
+}
+span,
+time,
+input,
+button {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 300;
+}
 .app {
   margin: 2rem auto 0 auto;
-  /*max-width: 400px;*/
+  /* max-width: 400px */
 }
-
 .top-panel {
   margin: 1rem 0;
 }

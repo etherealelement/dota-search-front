@@ -1,34 +1,38 @@
-.modal{
-    width: 100vw;
-    background-color: rgba(8, 5, 9, 0.42);
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-items: center;
-    opacity: 0;
-    pointer-events: none;
-    /*transition: 0.3s;*/
+.modal {
+  background-color: rgba(8, 5, 9, 0.42);
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  opacity: 0;
+  pointer-events: none;
+  width: 100vw;
 }
-.modal.active{
-    opacity: 1;
-    pointer-events: all;
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
 }
-
-.modal__content{
-    border-radius: 12px;
-    background-color: rgba(7, 14, 40, 0.78);
-    padding: 20px;
-    display: flex;
-    float: right;
-    position: fixed;
-    margin: auto;
-    right: 0;
-    /*transition: 0.3s all;*/
-    /*width: 60vw;*/
-    pointer-events: none;
-    /*columns: 1;*/
+.modal__content {
+  background-color: rgba(0, 9, 46, 0.78);
+  border-radius: 4px;
+  display: flex;
+  margin: auto;
+  padding: 20px;
+  pointer-events: none;
+  transition: 0.9s all;
+  width: 50vw;
 }
-
-.modal__content.active{
-    pointer-events: all;
+.modal__content.active {
+  pointer-events: all;
+  margin-bottom: 8rem;
+}
+input,
+button {
+  letter-spacing: 1px;
+  margin-top: 10px;
+  padding: 8px 0;
+  text-align: center;
+}
+.dropdown-toggle {
+  border-radius: 4px;
+  width: 100%;
 }
