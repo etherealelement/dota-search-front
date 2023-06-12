@@ -33,13 +33,15 @@ export default class App extends Component{
     onMessagesLoaded = (msgs)=> {
         this.setState({
             items: [
-                ...msgs.map(this.FromMessage),
+                ...msgs.map(this.FromMessage).filter((el)=>{
+                  return (el.label?.length) // no empty, null, or undefined labels
+                }),
             ],
             loading: false
         })
     }
     updateMessages(){
-        this.api.getAllMessages()
+        this.api.getAllMessages(false)
             .then(this.onMessagesLoaded);
     }
     FromUser = (v) => {

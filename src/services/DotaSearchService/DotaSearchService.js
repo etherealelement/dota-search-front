@@ -2,7 +2,6 @@ export default class DotaSearchService {
     _apiBase = "http://95.31.249.76:322";
     cached = caches.open('resources');
     fetchCached = async (request) => {
-        console.log("Using cache");
         const response = await (await this.cached).match(request);
         if (response !== undefined){
             console.log(response);
@@ -16,15 +15,17 @@ export default class DotaSearchService {
     async getResource(url) {
         const options = {
             method: "GET",
-            headers: {"Accept": "*/*"},
+            headers: {
+                "Accept": "*/*"
+            },
         };
         const request = new Request(this._apiBase+url, options);
         let response = {};
-        if ('caches' in window) {
-            response = await this.fetchCached(request);
-        } else{
+        // if ('caches' in window) {
+        //     response = await this.fetchCached(request);
+        // } else{
             response = await fetch(request);
-        }
+        // }
         if (response.status === 204) return {};
         const body = await response.json();
         if (response.statusCode === 204) body.ok = false;

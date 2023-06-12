@@ -4,34 +4,49 @@ import Constants from "../../shared/Constants";
 import Modal from "../common/modal";
 import AddPlayerForm from "./add-player-form/AddPlayerForm";
 
+const DEFAULT_USER = {
+    UsrLogin:"",
+    UsrLink:"",
+    UsrMMR:"",
+    UsrPossiblePos: []
+}
+
 export default class ItemAdd extends Component{
     state = {
-        props: {},
+        ...DEFAULT_USER,
         modalActive: false
     };
-    onPropsChange = (e)=>{
-        this.setState({props:e.target.value});
+    onChange = (e) => {
+        e.preventDefault();
+        const {type, name, checked, value} = e.target;
+        const val = type === 'checkbox' ? checked : value;
+        this.setState({ [name]: val});
     }
     setModalActive = (active) => {
         this.setState({modalActive: active})
     }
     render() {
         const {onAddItem, itemType} = this.props;
-        const {props, modalActive} = this.state;
-        if (itemType.itemType === Constants.MESSAGE) return;
-        const onClick = (e)=>{
+        const {modalActive} = this.state;
+        if (itemType.itemType === Constants.MESSAGE)
+            return;
+
+        const  onClickUsr = (e)=>{
             e.preventDefault()
-            onAddItem(props);
-            this.setState({props:{}});
+            onAddItem(this.state);
+            this.setState({
+                ...DEFAULT_USER,
+                modalActive: false
+            });
         };
-
-        const ItemAddForm = () =>{
-            const {itemType} = this.props;
-            if (itemType === Constants.PLAYER)
-                return new AddPlayerForm();
-            return <div>{itemType}</div>;
-
-        }
+        // const ItemAddForm = () =>{
+        //     const { itemType } = this.props;
+        //     switch (itemType) {
+        //         case Constants.PLAYER:
+        //             return 
+        //     }
+        //     return <div>{itemType}</div>;
+        // }
         return(
             <div className="col">
                 <div className="item-add-form d-flex row">
@@ -43,7 +58,11 @@ export default class ItemAdd extends Component{
                     </button>
                 </div>
                 <Modal active={modalActive} setActive={this.setModalActive}>
-                    <ItemAddForm onAddItem={onAddItem} itemType={itemType}/>
+                    <AddPlayerForm
+                        onAddItem={onClickUsr}
+                        onChange={this.onChange}
+                        user={this.state}
+                    />
                 </Modal>
             </div>
         )

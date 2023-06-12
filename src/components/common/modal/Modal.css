@@ -18,7 +18,7 @@
   margin: auto;
   padding: 20px;
   pointer-events: none;
-  transition: 0.9s all;
+  transition: 0.3s all;
   width: 50vw;
 }
 .modal__content.active {
