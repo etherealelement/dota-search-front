@@ -1,70 +1,37 @@
 import React, {Component} from "react";
 import './item-add.css'
-import Constants from "../../shared/Constants";
-import Modal from "../common/modal";
-import AddPlayerForm from "./add-player-form/AddPlayerForm";
-
-const DEFAULT_USER = {
-    UsrLogin:"",
-    UsrLink:"",
-    UsrMMR:"",
-    UsrPossiblePos: []
-}
 
 export default class ItemAdd extends Component{
     state = {
-        ...DEFAULT_USER,
-        modalActive: false
+        text: ""
     };
-    onChange = (e) => {
-        e.preventDefault();
-        const {type, name, checked, value} = e.target;
-        const val = type === 'checkbox' ? checked : value;
-        this.setState({ [name]: val});
-    }
-    setModalActive = (active) => {
-        this.setState({modalActive: active})
+    onLabelChange = (e)=>{
+        this.setState({text:e.target.value});
     }
     render() {
         const {onAddItem, itemType} = this.props;
-        const {modalActive} = this.state;
-        if (itemType.itemType === Constants.MESSAGE)
-            return;
-
-        const  onClickUsr = (e)=>{
+        const onClick = (e)=>{
             e.preventDefault()
-            onAddItem(this.state);
-            this.setState({
-                ...DEFAULT_USER,
-                modalActive: false
-            });
+            onAddItem(this.state.text);
+            this.setState({text:""});
         };
-        // const ItemAddForm = () =>{
-        //     const { itemType } = this.props;
-        //     switch (itemType) {
-        //         case Constants.PLAYER:
-        //             return 
-        //     }
-        //     return <div>{itemType}</div>;
-        // }
         return(
-            <div className="col">
-                <div className="item-add-form d-flex row">
-                    <button
-                        className="item-add-form btn btn-secondary btn-lg btn-block"
-                        onClick={()=>{this.setModalActive(true)}}
-                    >
-                        Add {itemType}
-                    </button>
-                </div>
-                <Modal active={modalActive} setActive={this.setModalActive}>
-                    <AddPlayerForm
-                        onAddItem={onClickUsr}
-                        onChange={this.onChange}
-                        user={this.state}
-                    />
-                </Modal>
-            </div>
+            <form className="item-add-form d-flex"
+                  onSubmit={onClick}
+            >
+                <input type="text"
+                       className="form-control input-group-text"
+                       onChange={this.onLabelChange}
+                       placeholder={`Add ${itemType}`}
+                       value={this.state.text}
+                />
+                <button
+                    className="btn btn-dark"
+                    onClick={onClick}
+                >
+                    Add
+                </button>
+            </form>
         )
     }
 }

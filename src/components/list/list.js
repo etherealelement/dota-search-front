@@ -1,33 +1,28 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import ListItem from '../list-item';
 import './list.css';
-import Loader from "../common/loader";
 
-export default class List extends Component {
-  render() {
-    const {items, loading} = this.props;
-    if (loading) return <Loader/>;
-    const elements = items.map((item) => {
-      const {id, ...itemProps} = item;
-      console.log("Rendering item type: ", item.itemType);
-      return (
-          <li key={id} className="list-group-item">
-            <ListItem
-                {...itemProps}
-                onToggleDone={() => {
-                  onSelectItem(id)
-                }}
-            />
-          </li>
-      );
-    });
+const List = ({ items, onSelectItem}) => {
 
+  const elements = items.map((item) => {
+    const { id, ...itemProps } = item;
+    console.log("Rendering item type: ", item.itemType);
     return (
-        <ul className="list-group list">
-          {elements}
-        </ul>
+      <li key={id} className="list-group-item">
+        <ListItem
+            {...itemProps }
+            onToggleDone ={() => {onSelectItem(id)}}
+        />
+      </li>
     );
-  };
-}
-// export default List;
+  });
+
+  return (
+    <ul className="list-group list">
+      { elements }
+    </ul>
+  );
+};
+
+export default List;

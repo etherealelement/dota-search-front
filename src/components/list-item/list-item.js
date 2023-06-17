@@ -17,7 +17,7 @@ export default class ListItem extends Component {
         // case 'command':
         //   return new Command({...this.props});
       }
-      // console.log("Unknown item type: ", itemType);
+      console.log("Unknown item type: ", itemType);
       return(
           <div className="row-cols-sm-1">
             <div className="col">
@@ -36,7 +36,7 @@ export default class ListItem extends Component {
           </div>
       );
     };
-    // console.log("item has:", this.props);
+    console.log("item has:", this.props);
     return (
       <div className="container-fluid list-item">
         <div className="row">

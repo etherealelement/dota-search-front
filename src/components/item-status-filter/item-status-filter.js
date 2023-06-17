@@ -10,7 +10,7 @@ const Button = ({filter, label, onClick}) =>{
     return(
     <button type="button"
             className={`btn ${className}`}
-            onClick={()=>{onClick({itemType:lower})}}>
+            onClick={()=>{onClick(lower)}}>
         {label}
     </button>
     );

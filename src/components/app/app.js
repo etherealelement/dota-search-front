@@ -5,49 +5,19 @@ import SearchPanel from '../search-panel';
 import List from '../list';
 import ItemStatusFilter from '../item-status-filter';
 import ItemAdd from "../item-add";
+
 import './app.css';
+import GlobalCache from "../../services/Cache";
 import DotaSearchService from "../../services/DotaSearchService";
-import Constants from "../../shared/Constants";
+const itemType = {COMMAND: "command", PLAYER: "player", MESSAGE: "message"};
 
 export default class App extends Component{
     maxId=1;
-    state = {
-        items: [],
-        filter: {itemType: Constants.MESSAGE},
-        term: '',
-        loading: true,
-        // cache: new GlobalCache()
-    };
     api = new DotaSearchService()
-    FromMessage = (v) => {
-        console.log("got message", v);
-        return {
-            label:v.Data,
-            itemType: Constants.MESSAGE,
-            selected: false,
-            key:this.maxId,
-            id:this.maxId++,
-            ...v,
-        }};
-
-    onMessagesLoaded = (msgs)=> {
-        this.setState({
-            items: [
-                ...msgs.map(this.FromMessage).filter((el)=>{
-                  return (el.label?.length) // no empty, null, or undefined labels
-                }),
-            ],
-            loading: false
-        })
-    }
-    updateMessages(){
-        this.api.getAllMessages(false)
-            .then(this.onMessagesLoaded);
-    }
     FromUser = (v) => {
         return {
         label: v.Name,
-        itemType: Constants.PLAYER,
+        itemType: itemType.PLAYER,
         selected: false,
         key:this.maxId,
         ...v,
@@ -56,12 +26,28 @@ export default class App extends Component{
     FromCommand = (v) => {
         return {
             label:v.ID,
-            itemType: Constants.COMMAND,
+            itemType: itemType.COMMAND,
             selected: false,
             key:this.maxId,
             ...v,
             id:this.maxId++,
         }};
+    FromMessage = (v) => {
+        console.log("got message", v);
+        return {
+            label:v.Data,
+            itemType: itemType.MESSAGE,
+            selected: false,
+            key:this.maxId,
+            ...v,
+            id:this.maxId++,
+        }};
+    state = {
+        appData: [],
+        filter: itemType.MESSAGE,
+        term: ''
+        // cache: new GlobalCache()
+    };
 
     newItem = (label) => { // switch filter: FromUser or FromCommand
         return {
@@ -76,15 +62,15 @@ export default class App extends Component{
     };
     addItem = (label)=>{
         this.setState({
-            items: [
-            ...this.state.items,
+            appData: [
+            ...this.state.appData,
             this.newItem(label)
             ]
         });
     }
     deleteItem = (item_id)=>{
         this.setState({
-            items: this.state.items.filter(({id}) => item_id !== id)
+            appData: this.state.appData.filter(({id}) => item_id !== id)
         })
     };
 
@@ -105,13 +91,13 @@ export default class App extends Component{
     };
 
     filterByState = (arr, state) => {
-        switch (state.itemType){
+        switch (state){
             case 'command':
-                return arr.filter((el)=>{return el.itemType === Constants.COMMAND});
+                return arr.filter((el)=>{return el.itemType === itemType.COMMAND});
             case 'player':
-                return arr.filter((el)=>{return el.itemType === Constants.PLAYER});
+                return arr.filter((el)=>{return el.itemType === itemType.PLAYER});
             case 'message':
-                return arr.filter((el)=>{return el.itemType === Constants.MESSAGE});
+                return arr.filter((el)=>{return el.itemType === itemType.MESSAGE});
             default:
                 return arr;
         }
@@ -123,21 +109,32 @@ export default class App extends Component{
     };
 
     toggleProp = (id, prop) =>{
-        const {items} = this.state;
-        const idx = this.findElem(items, 'id', id);
-        const oldItem = this.state.items[idx];
+        const {appData} = this.state;
+        const idx = this.findElem(appData, 'id', id);
+        const oldItem = this.state.appData[idx];
         const newItem = {...oldItem, [prop]:!oldItem[prop]};
         console.log("New item is: ", newItem);
         const newData = [
-            ...items.slice(0,idx),
+            ...appData.slice(0,idx),
             newItem,
-            ...items.slice(idx+1)
+            ...appData.slice(idx+1)
         ];
         this.setState({searchData: newData});
     }
 
     findElem = (arr, prop, val) => {
         return arr.findIndex((el) => {return el[prop] === val})
+    };
+
+    updateMessages(){
+        this.api.getAllMessages()
+            .then((msgs)=>{
+                this.setState({
+                    appData:[
+                        ...msgs.map(this.FromMessage),
+                    ]
+                })
+            });
     }
     constructor() {
         super();
@@ -145,12 +142,11 @@ export default class App extends Component{
     }
 
     render() {
-        const {term, filter, items, loading} = this.state;
-        let searched = Array.from( items.values() );
-        // TODO тяжелая конструкция, надо бы оптимизировать
-        const players = this.filterByState(searched, {itemType:Constants.PLAYER}).length;
-        const commands = this.filterByState(searched, {itemType:Constants.COMMAND}).length;
-        const messages = this.filterByState(searched, {itemType:Constants.MESSAGE}).length;
+        const {term, filter, appData} = this.state;
+        let searched = Array.from( appData.values() );
+        const players = this.filterByState(searched, itemType.PLAYER).length;
+        const commands = this.filterByState(searched, itemType.COMMAND).length;
+        const messages = this.filterByState(searched, itemType.MESSAGE).length;
         searched = this.filterByState(searched, filter);
         searched = this.filterBySearch(searched,term);
         return (
@@ -158,18 +154,15 @@ export default class App extends Component{
                 <AppHeader players={players} commands={commands} messages={messages}/>
                 <div className="top-panel d-flex">
                     <SearchPanel  onChangeSearch={this.changeSearch} term={term}/>
-                    <ItemStatusFilter onChangeFilter={this.changeFilter} filter={filter.itemType}/>
+                    <ItemStatusFilter onChangeFilter={this.changeFilter} filter={filter}/>
                 </div>
                 <List
                     items={searched}
-                    loading={loading}
-                    // onSelectItem={this.selectItem}
-                    filter={filter}
-                    term={term}
-                    onDeleted={this.deleteItem}
-                    // onToggleImportant={this.toggleProp}
+                    onSelectItem={this.selectItem}
+                    // onDeleted={this.deleteItem}
+                    // onToggleImportant={this.toggleImportant}
                 />
-                <ItemAdd onAddItem={this.addItem} itemType={filter.itemType}/>
+                {/*<ItemAdd onAddItem={this.addItem} itemType={filter}/>*/}
             </div>
         );
     }

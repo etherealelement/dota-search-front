@@ -22,8 +22,8 @@ export default class User extends Component{
                     MMR: {MMR}
                 </div>
                 <div className="col float-lg-end border border-info border-opacity-25">
-                    <a href={Link} className="float-lg-end">
-                        {Link}
+                    <a href={this.props.Link} className="float-lg-end">
+                        {this.props.Link}
                     </a>
                 </div>
             </div>

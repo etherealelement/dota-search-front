@@ -1,9 +1,7 @@
 .item-add-form{
-    padding-left: 12px;
-    padding-right: 12px;
+    margin-top: 10px;
 }
 
-.item-add-form btn{
-    margin-right: 20px;
-    margin-left: 20px;
+.item-add-form input{
+    margin-right: 3px;
 }
