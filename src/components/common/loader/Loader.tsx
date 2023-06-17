@@ -1,4 +1,4 @@
-import "./loader.css"
+import './loader.css';
 const Loader = () => {
     return (
         <div className="loadingio-spinner-bean-eater-iqm2zlr0j4">
@@ -16,5 +16,5 @@ const Loader = () => {
             </div>
         </div>
     );
-}
+};
 export default Loader;

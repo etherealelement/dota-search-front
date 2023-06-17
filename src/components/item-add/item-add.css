@@ -1,7 +1,26 @@
 .item-add-form{
-    margin-top: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
-.item-add-form input{
-    margin-right: 3px;
+.item-add-form btn{
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.item-add input{
+    padding: 6px 12px;
+    background: rgb(31, 32, 35);
+    border: 1px solid rgb(60, 63, 68);
+    border-radius: 4px;
+    font-size: 13px;
+    color: rgb(247, 248, 248);
+    height: 46px;
+    appearance: none;
+    transition: border 0.15s ease 0s;
+:focus{
+    outline: none;
+    box-shadow: none;
+    border-color: rgb(100, 153, 255);
+}
 }

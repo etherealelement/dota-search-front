@@ -10,10 +10,6 @@
   margin: 3px;
 }
 
-.list-item .selected .list-item-label {
-  text-decoration: line-through;
-}
-
 .list-item .important .list-item-label {
   font-weight: bold;
   color: steelblue;
