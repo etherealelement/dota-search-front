@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@types/http-status-codes": "^1.2.0",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
     "@types/react": "^18.2.12",
@@ -12,7 +13,8 @@
     "react": "~18.2.0",
     "react-dom": "^18.2.0",
     "serve": "^14.2.0",
-    "styled-components": "^5.3.11"
+    "styled-components": "^5.3.11",
+    "uuid": "^9.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,6 +35,8 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.195",
+    "@types/uuid": "^9.0.2",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react-redux": "^4.0.0",
     "react-scripts": "5.0.1",

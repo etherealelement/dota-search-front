@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './AddPlayerForm.css';
 import {addKeyId, isInDesiredForm, isValidHttpUrl, POSITIONS, QUINN_MMR, User} from '../../../shared';
 import {CheckboxInput, TextInput} from '../../common/inputs'
@@ -10,7 +10,7 @@ const ph = {
 };
 
 // @ts-ignore
-const isFieldsInvalid = (user, setError) => {
+const isFieldsInvalid = (user: User, setError:(string)=>void) => {
     if (!user.Login) {
         setError(`Please, specify your login.`);
         return true;
@@ -27,7 +27,7 @@ const isFieldsInvalid = (user, setError) => {
         setError(`Bad MMR ${user.MMR}, you are not Quinn, please be straight.`);
         return true;
     }
-    if (!Object.keys(user.PossiblePos).some(key => user.PossiblePos[key])) {
+    if (!Object.values(user.PossiblePos).some((b:boolean)=>b)) {
         setError(`Please, specify preferable position.`);
         return true;
     }
@@ -39,7 +39,8 @@ const AddPlayerForm = (props: { onAddItem: any; }) => {
     const [error, setError] = useState('');
     const {onAddItem} = props;
 
-    const onChange = useCallback((e: { target: { type: any; name: any; checked: any; value: any; }; preventDefault: () => void; }) => {
+    const onChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        // @ts-ignore
         const {type, name, checked, value} = e.target;
         if (type === 'checkbox') {
             setUser({...user, PossiblePos: {...user.PossiblePos, [name]: checked}});
@@ -48,7 +49,7 @@ const AddPlayerForm = (props: { onAddItem: any; }) => {
             setUser({...user, [name]: value});
         }
     }, [user]);
-    const onSubmit = useCallback(e => {
+    const onSubmit = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault();
         if (isFieldsInvalid(user, setError)) return;
         setError('');
@@ -67,6 +68,7 @@ const AddPlayerForm = (props: { onAddItem: any; }) => {
                                                           childrn={el}/>,
     );
     return (
+        // @ts-ignore
         <form
             className="add_player_form input-group"
             onSubmit={onSubmit}

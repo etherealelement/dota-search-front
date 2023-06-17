@@ -1,5 +1,4 @@
-import StatusCodes from 'http-status-codes';
-import {FIXMELATER} from "../../shared/Constants";
+import {FIXMELATER, HttpStatusCode} from "../../shared/Constants";
 
 const defaultHeaders = {
     'Accept': '*/*',
@@ -17,7 +16,7 @@ export default class DotaSearchService {
 
         const response = await fetch(request);
         // }
-        if (response.status === StatusCodes.NO_CONTENT) return {};
+        if (response.status === HttpStatusCode.NoContent) return {};
         return response.json();
     }
 
@@ -27,9 +26,9 @@ export default class DotaSearchService {
             headers: defaultHeaders,
             body: JSON.stringify(value),
         });
-        if (response.status === StatusCodes.TOO_MANY_REQUESTS)
+        if (response.status === HttpStatusCode.TooManyRequests)
             return {error: 'Too many requests.', status: 'error'};
-        if (response.status === StatusCodes.BAD_REQUEST)
+        if (response.status === HttpStatusCode.BadRequest)
             return {error: await response.text(), status: 'error'};
         return response.json();
     }

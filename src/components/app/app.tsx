@@ -7,29 +7,30 @@ import ItemStatusFilter from '../item-status-filter';
 import ItemAdd from '../item-add';
 import './app.css';
 import DotaSearchService from '../../services/DotaSearchService';
-import {getId, ItemType} from '../../shared';
+import {ItemType, getId} from '../../shared';
+// @ts-ignore
 import {cloneDeep} from 'lodash';
 import {FIXMELATER} from "../../shared/Constants";
 
 
 export default class App extends Component {
     state = {
-        items: [],
         [ItemType.MESSAGE]: [],
         [ItemType.PLAYER]: [],
         [ItemType.COMMAND]: [],
         filter: {itemType: ItemType.MESSAGE},
         term: '',
         loaded: {},
+
     };
     api = new DotaSearchService();
 
-    constructor(props) {
+    constructor(props : FIXMELATER) {
         super(props);
         this.updateMessages();
     }
 
-    FromMessage = v => {
+    FromMessage = (v:FIXMELATER) => {
         const id = getId('message_');
         return {
             itemType: ItemType.MESSAGE,
@@ -144,11 +145,16 @@ export default class App extends Component {
         const {term, filter, message, player, command, loaded} = this.state;
         let searched = this.filterByState(filter);
         searched = this.filterBySearch(searched, term);
+        // @ts-ignore
         const status = loaded[filter.itemType];
+        // @ts-ignore
         const players = player.length;
+        // @ts-ignore
         const commands = command.length;
+        // @ts-ignore
         const messages = message.length;
         return (
+            // @ts-ignore
             <div className="app">
                 <AppHeader players={players} commands={commands} messages={messages}/>
                 <div className="top-panel d-flex">

@@ -1,29 +1,31 @@
 import './User.css';
 import React from "react";
+import {Positions} from "../../../shared";
 
 export class UserProps {
-    login: string = '';
+    Login: string = '';
     Link: string = '';
     MMR: string = '';
-    PossiblePos: any;
+    PossiblePos: Positions = new Positions();
     itemType: string = '';
     onToggleDone: any;
 }
 
 
 const User = (props: UserProps) => {
-    const {login, Link, MMR, PossiblePos, itemType} = props;
-    const extractKeys = (obj: { [x: string]: unknown; }) => JSON.stringify(Object.keys(obj)
-        .filter(key => obj[key]))
+    const {Login, Link, MMR, PossiblePos, itemType} = props;
+    const extractKeys = (obj: Positions) => JSON.stringify(Object.entries(obj)
+        .filter(([a, b]) => b)
+        .map(([a,b])=>a))
         .replace('[', '')
         .replace(']', '');
 
-    return (
+    return (    // @ts-ignore
         <div className="row">
             <div className="col border border-info border-opacity-25">
             <span
                 className={'list-item-label'}>
-                {itemType}: {login}
+                {itemType}: {Login}
             </span>
             </div>
             <div className="col-2 border border-info border-opacity-25">

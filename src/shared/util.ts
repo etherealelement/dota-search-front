@@ -1,7 +1,8 @@
-// @ts-ignore
-import _uniqueId from 'lodash/uniqueId';
-// @ts-ignore
+import {v4 as uuidv4} from 'uuid';
 import {cloneDeep} from 'lodash';
+const _uniqueId = (prefix: string) =>{
+    return prefix + uuidv4();
+}
 
 export const getId = (prefix = 'prefix_') => _uniqueId(prefix);
 export const addId = (v:Object, prefix = 'prefix_')=>{

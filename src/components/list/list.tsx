@@ -5,7 +5,7 @@ import {FIXMELATER} from "../../shared/Constants";
 
 const List = (props: FIXMELATER) => {
     const {items, loaded} = props;
-    if (!loaded) return <Loader/>;
+    if (!loaded) return ;
     const elements = items.map((item: FIXMELATER) => {
         const {id, ...itemProps} = item;
         return (
@@ -18,6 +18,7 @@ const List = (props: FIXMELATER) => {
     });
 
     return (
+        // @ts-ignore
         <ul className="list-group list">
             {elements}
         </ul>
