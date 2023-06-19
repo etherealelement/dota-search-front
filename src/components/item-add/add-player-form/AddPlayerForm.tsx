@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import './AddPlayerForm.css';
 import {addKeyId, isInDesiredForm, isValidHttpUrl, POSITIONS, QUINN_MMR, User} from '../../../shared';
 import {CheckboxInput, TextInput} from '../../common/inputs'
+import {CheckBoxKeys, TextInputKeys} from '../../../shared/Constants';
 
 const ph = {
     Login: 'Введите никнейм',
@@ -9,8 +10,7 @@ const ph = {
     MMR: 'Введите свой ММР',
 };
 
-// @ts-ignore
-const isFieldsInvalid = (user: User, setError:(string)=>void) => {
+const isFieldsInvalid = (user: User, setError:(s:string)=>void) => {
     if (!user.Login) {
         setError(`Please, specify your login.`);
         return true;
@@ -34,40 +34,35 @@ const isFieldsInvalid = (user: User, setError:(string)=>void) => {
     return false;
 };
 
-const AddPlayerForm = (props: { onAddItem: any; }) => {
+const AddPlayerForm = (props: { onAddItem: (v:User)=>void }) => {
     const [user, setUser] = useState(new User());
     const [error, setError] = useState('');
     const {onAddItem} = props;
 
-    const onChange = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    const onChange = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
         // @ts-ignore
         const {type, name, checked, value} = e.target;
         if (type === 'checkbox') {
             setUser({...user, PossiblePos: {...user.PossiblePos, [name]: checked}});
-        } else {        // @ts-ignore
+        } else {
             e.preventDefault();
             setUser({...user, [name]: value});
         }
     }, [user]);
     const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
-        // @ts-ignore
         e.preventDefault();
         if (isFieldsInvalid(user, setError)) return;
         setError('');
-        const nUser = addKeyId(user, 'player_');
+        const nUser = addKeyId(user, 'player_') as User;
         onAddItem(nUser);
         setUser({
             ...new User(),
         });
     }, [user, onAddItem]);
     // @ts-ignore
-    const inputs = ['Login', 'Link', 'MMR'].map(el => <TextInput name={el} placeholder={ph[el]} user={user}
-                                                                 onChange={onChange}/>,
-    );
+    const inputs = ['Login', 'Link', 'MMR'].map(el => <TextInput name={el} placeholder={ph[el]} user={user} onChange={onChange} key={TextInputKeys[el]}/>);
     // @ts-ignore
-    const checkboxes = POSITIONS.map(el => <CheckboxInput name={el} value={user.PossiblePos[el]} onChange={onChange}
-                                                          childrn={el}/>,
-    );
+    const checkboxes = POSITIONS.map(el => <CheckboxInput name={el} value={user.PossiblePos[el]} onChange={onChange} childrn={el} key={CheckBoxKeys[el]}/>);
     return (
         // @ts-ignore
         <form

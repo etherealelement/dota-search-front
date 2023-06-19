@@ -8,7 +8,6 @@ import ItemAdd from '../item-add';
 import './app.css';
 import DotaSearchService from '../../services/DotaSearchService';
 import {ItemType, getId, User} from '../../shared';
-// @ts-ignore
 import {cloneDeep} from 'lodash';
 import {FIXMELATER} from "../../shared/Constants";
 
@@ -107,13 +106,6 @@ export default class App extends Component {
         });
     };
 
-    deleteItem = (itemId: FIXMELATER) => {
-        this.setState({
-            // @ts-ignore
-            items: this.state.items.filter(({id}) => itemId !== id),
-        });
-    };
-
     changeFilter = (filter: { itemType: string; }) => {
         const {loaded} = this.state;
         // @ts-ignore
@@ -124,11 +116,20 @@ export default class App extends Component {
 
     filterBySearch = (arr: FIXMELATER, term: FIXMELATER) => {
         if (term.trim() === '') return arr;
-        // @ts-ignore
-        return arr.filter(({Data}) => {
-            const lowerLabel = Data.toLowerCase();
-            return lowerLabel.indexOf(term.toLowerCase()) > -1;
-        });
+        switch (this.state.filter.itemType) {
+            case "player":
+                // @ts-ignore
+                return arr.filter(({Login}) => {
+                    const lowerLabel = Login.toLowerCase();
+                    return lowerLabel.indexOf(term.toLowerCase()) > -1;});
+
+            case "message":
+                // @ts-ignore
+                return arr.filter(({Data}) => {
+                    const lowerLabel = Data.toLowerCase();
+                    return lowerLabel.indexOf(term.toLowerCase()) > -1;
+                });
+        }
     };
 
     filterByState = (state: { itemType: string; }) => this.state[state.itemType];
@@ -161,9 +162,8 @@ export default class App extends Component {
                 <List
                     items={searched}
                     loaded={status}
-                    filter={filter}
+                    itemType={filter.itemType}
                     term={term}
-                    onDeleted={this.deleteItem}
                 />
                 <ItemAdd onAddItem={this.addItem} itemType={filter.itemType}/>
             </div>

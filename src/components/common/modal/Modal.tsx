@@ -2,8 +2,7 @@ import './Modal.css';
 import {Component} from 'react';
 import {FIXMELATER} from "../../../shared/Constants";
 
-const Modal = (props: FIXMELATER) => {
-        // @ts-ignore
+const Modal = (props: { active: boolean; setActive: FIXMELATER; children: FIXMELATER; }) => {
         const {active, setActive, children} = props;
         const classname = active ? 'modal active' : 'modal';
         const classnameContent = active ? 'modal__content active' : 'modal';

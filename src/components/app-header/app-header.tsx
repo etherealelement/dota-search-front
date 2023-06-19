@@ -1,7 +1,7 @@
 import './app-header.css';
 
-// @ts-ignore
-const AppHeader = ({players, commands, messages}) => {
+const AppHeader = (props: { players: string; commands: string; messages: string; }) => {
+    const {players, commands, messages} = props;
     // @ts-ignore
     return (
         // @ts-ignore

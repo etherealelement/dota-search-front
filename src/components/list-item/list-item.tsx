@@ -1,23 +1,17 @@
 import './list-item.css';
-import UserCard from './user/UserCard';
-import Message from './message/Message';
+import UserCard, {UserProps} from './user/UserCard';
+import Message, {MessageProps} from './message/Message';
 import {FIXMELATER} from "../../shared/Constants";
 // import Command
 
 
-const ListItem = (props: FIXMELATER) => {
+const ListItem = (props: MessageProps | UserProps) => {
     switch (props.itemType) {
         case 'player':
-            const playerPositions = JSON.stringify(Object.entries(props.PossiblePos)
-                .filter(([a, b]) => b)
-                .map(([a, b])=>a))
-                .replace('[', '')
-                .replace(']', '')
-                .replaceAll('"', '')
-                .replaceAll(',', ', ');
             // @ts-ignore
-            return <UserCard {...props} playerPositions={playerPositions}/>;
+            return <UserCard {...props}/>;
         case 'message':
+            // @ts-ignore
             return <Message {...props}/>;
         // case 'command':
         //     console.log("item has:", props);

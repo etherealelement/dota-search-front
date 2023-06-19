@@ -1,3 +1,5 @@
+import {getId} from "./util";
+
 export const ItemType = {COMMAND: 'command', PLAYER: 'player', MESSAGE: 'message'};
 export const QUINN_MMR = 12000;
 export const POSITIONS = ['HardSupport', 'SoftSupport', 'Offlane', 'Midlane', 'Carry'];
@@ -51,4 +53,16 @@ export const enum HttpStatusCode {
     ServiceUnavailable = 503,
     GatewayTimeout = 504,
     HttpVersionNotSupported = 505
+}
+export const TextInputKeys = {
+    Login: getId('text_input_'),
+    Link: getId('text_input_'),
+    MMR: getId('text_input_'),
+}
+export const CheckBoxKeys = {
+    HardSupport: getId('checkbox_input_'),
+    SoftSupport: getId('checkbox_input_'),
+    Offlane: getId('checkbox_input_'),
+    Midlane: getId('checkbox_input_'),
+    Carry: getId('checkbox_input_'),
 }

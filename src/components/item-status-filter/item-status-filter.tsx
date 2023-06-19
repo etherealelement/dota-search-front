@@ -1,12 +1,12 @@
 import './item-status-filter.css';
 import {getId} from '../../shared';
+import {FIXMELATER} from "../../shared/Constants";
+import {MouseEventHandler} from "react";
 
-
-// @ts-ignore
-const Button = ({filter, label, onClick}) => {
+const Button = (props: { filter: string; label: string; onClick: (p:{itemType:string}) => void; }) => {
+    const {filter, label, onClick} = props;
     let lower = label.toLowerCase();
     if (lower !== 'all') lower = lower.slice(0, -1);
-
     const className = filter === lower ? 'btn-grad' : 'btn-outline-secondary';
     return (
         // @ts-ignore
@@ -20,7 +20,7 @@ const Button = ({filter, label, onClick}) => {
     );
 };
 
-const ItemStatusFilter = (props: { onChangeFilter: any; filter: any; }) => {
+const ItemStatusFilter = (props: { onChangeFilter: FIXMELATER; filter: FIXMELATER; }) => {
     const {onChangeFilter, filter} = props;
     const buttons = ['Messages', 'Commands', 'Players'].map(el => {
         const id = getId('filter_');
