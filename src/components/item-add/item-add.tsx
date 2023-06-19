@@ -6,14 +6,14 @@ import AddPlayerForm from './add-player-form/AddPlayerForm';
 import {FIXMELATER} from "../../shared/Constants";
 
 // Контроллер модалки с кнопкой активации
-export const ItemAdd = (props: { onAddItem: FIXMELATER; itemType: FIXMELATER; }) => {
-    // condole.log()
+export const ItemAdd = (props: { onAddItem: (q:FIXMELATER)=>void; itemType: FIXMELATER; }) => {
     const [modalActive, setModalActive] = useState(false);
     const {onAddItem, itemType} = props;
     const onSubmit = useCallback((v: FIXMELATER) => {
         onAddItem(v);
         setModalActive(false);
     }, [onAddItem]);
+    // @ts-ignore
     if (itemType === ItemType.MESSAGE) return (<div/>);
     return (
         <div className="col">

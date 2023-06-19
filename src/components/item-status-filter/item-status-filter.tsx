@@ -9,6 +9,7 @@ const Button = ({filter, label, onClick}) => {
 
     const className = filter === lower ? 'btn-grad' : 'btn-outline-secondary';
     return (
+        // @ts-ignore
         <button type="button"
                 className={`btn ${className}`}
                 onClick={() => {
@@ -23,7 +24,7 @@ const ItemStatusFilter = (props: { onChangeFilter: any; filter: any; }) => {
     const {onChangeFilter, filter} = props;
     const buttons = ['Messages', 'Commands', 'Players'].map(el => {
         const id = getId('filter_');
-        return (<Button filter={filter} label={el} onClick={onChangeFilter} id={id} key={id}/>);
+        return (<Button filter={filter} label={el} onClick={onChangeFilter} key={id}/>);
     });
     return (
         <div className="btn-group">

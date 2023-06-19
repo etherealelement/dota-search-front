@@ -8,6 +8,7 @@ class MessageProps {
 
 const Message = (props: MessageProps) => {
     return (
+        // @ts-ignore
         <div className="row-cols-sm-1">
             <div className="col">
           <span className="list-item-label float-lg-start">

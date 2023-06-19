@@ -7,11 +7,10 @@ import ItemStatusFilter from '../item-status-filter';
 import ItemAdd from '../item-add';
 import './app.css';
 import DotaSearchService from '../../services/DotaSearchService';
-import {ItemType, getId} from '../../shared';
+import {ItemType, getId, User} from '../../shared';
 // @ts-ignore
 import {cloneDeep} from 'lodash';
 import {FIXMELATER} from "../../shared/Constants";
-
 
 export default class App extends Component {
     state = {
@@ -21,11 +20,10 @@ export default class App extends Component {
         filter: {itemType: ItemType.MESSAGE},
         term: '',
         loaded: {},
-
     };
     api = new DotaSearchService();
 
-    constructor(props : FIXMELATER) {
+    constructor(props : {}) {
         super(props);
         this.updateMessages();
     }
@@ -90,11 +88,10 @@ export default class App extends Component {
         [ItemType.PLAYER]: this.updateUsers,
     };
 
-    addItem = (_user: FIXMELATER) => {
+    addItem = (_user: User) => {
         const {player} = this.state;
         this.api.postUser(cloneDeep(_user)).then(() => {
             if (player) {
-                console.log('state is', player);
                 this.setState({
                     player: [
                         // @ts-ignore
@@ -103,7 +100,6 @@ export default class App extends Component {
                     ],
                 });
             } else {
-                console.log('no state, adding ', _user);
                 this.setState({
                     user: [_user],
                 });
@@ -113,6 +109,7 @@ export default class App extends Component {
 
     deleteItem = (itemId: FIXMELATER) => {
         this.setState({
+            // @ts-ignore
             items: this.state.items.filter(({id}) => itemId !== id),
         });
     };
@@ -128,15 +125,15 @@ export default class App extends Component {
     filterBySearch = (arr: FIXMELATER, term: FIXMELATER) => {
         if (term.trim() === '') return arr;
         // @ts-ignore
-        return arr.filter(({label}) => {
-            const lowerLabel = label.toLowerCase();
+        return arr.filter(({Data}) => {
+            const lowerLabel = Data.toLowerCase();
             return lowerLabel.indexOf(term.toLowerCase()) > -1;
         });
     };
 
     filterByState = (state: { itemType: string; }) => this.state[state.itemType];
 
-    changeSearch = e => {
+    changeSearch = (e: { preventDefault: () => void; target: { value: any; }; }) => {
         e.preventDefault();
         this.setState({term: e.target.value});
     };

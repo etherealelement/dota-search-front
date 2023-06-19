@@ -39,17 +39,18 @@ const AddPlayerForm = (props: { onAddItem: any; }) => {
     const [error, setError] = useState('');
     const {onAddItem} = props;
 
-    const onChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    const onChange = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         // @ts-ignore
         const {type, name, checked, value} = e.target;
         if (type === 'checkbox') {
             setUser({...user, PossiblePos: {...user.PossiblePos, [name]: checked}});
-        } else {
+        } else {        // @ts-ignore
             e.preventDefault();
             setUser({...user, [name]: value});
         }
     }, [user]);
-    const onSubmit = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
+        // @ts-ignore
         e.preventDefault();
         if (isFieldsInvalid(user, setError)) return;
         setError('');
@@ -74,7 +75,7 @@ const AddPlayerForm = (props: { onAddItem: any; }) => {
             onSubmit={onSubmit}
         >
             {inputs}
-            <span name="PossiblePos" className="add_player_item d-flex flex-row justify-content-around">
+            <span className="add_player_item d-flex flex-row justify-content-around">
                 {checkboxes}
             </span>
             <span className="field-validation-error">{error}</span>

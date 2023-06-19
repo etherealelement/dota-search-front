@@ -7,12 +7,14 @@ const _uniqueId = (prefix: string) =>{
 export const getId = (prefix = 'prefix_') => _uniqueId(prefix);
 export const addId = (v:Object, prefix = 'prefix_')=>{
     const d = cloneDeep(v);
+    // @ts-ignore
     d.id = _uniqueId(prefix);
     return d;
 };
 
 export const addKey = (v:Object, prefix = 'prefix_')=>{
     const d = cloneDeep(v);
+    // @ts-ignore
     d.key = _uniqueId(prefix);
     return d;
 };
@@ -20,7 +22,9 @@ export const addKey = (v:Object, prefix = 'prefix_')=>{
 export const addKeyId= (v:Object, prefix = 'prefix_')=>{
     const id =  _uniqueId(prefix);
     const d = cloneDeep(v);
+    // @ts-ignore
     d.key = id;
+    // @ts-ignore
     d.id = id;
     return d;
 };

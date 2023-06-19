@@ -6,3 +6,7 @@
     cursor: pointer;
     user-select: none;
 }
+
+.player-positions {
+    overflow-wrap: break-word;
+}

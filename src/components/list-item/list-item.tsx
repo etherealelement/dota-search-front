@@ -1,13 +1,22 @@
 import './list-item.css';
-import User from './user/User';
+import UserCard from './user/UserCard';
 import Message from './message/Message';
 import {FIXMELATER} from "../../shared/Constants";
 // import Command
 
+
 const ListItem = (props: FIXMELATER) => {
     switch (props.itemType) {
         case 'player':
-            return <User {...props}/>;
+            const playerPositions = JSON.stringify(Object.entries(props.PossiblePos)
+                .filter(([a, b]) => b)
+                .map(([a, b])=>a))
+                .replace('[', '')
+                .replace(']', '')
+                .replaceAll('"', '')
+                .replaceAll(',', ', ');
+            // @ts-ignore
+            return <UserCard {...props} playerPositions={playerPositions}/>;
         case 'message':
             return <Message {...props}/>;
         // case 'command':
