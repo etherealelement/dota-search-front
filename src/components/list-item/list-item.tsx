@@ -1,15 +1,14 @@
 import './list-item.css';
-import UserCard, {UserProps} from './user/UserCard';
+import PlayerCard, {PlayerProps} from './player/PlayerCard';
 import Message, {MessageProps} from './message/Message';
-import {FIXMELATER} from "../../shared/Constants";
 // import Command
 
 
-const ListItem = (props: MessageProps | UserProps) => {
+const ListItem = (props: MessageProps | PlayerProps) => {
     switch (props.itemType) {
         case 'player':
             // @ts-ignore
-            return <UserCard {...props}/>;
+            return <PlayerCard {...props}/>;
         case 'message':
             // @ts-ignore
             return <Message {...props}/>;

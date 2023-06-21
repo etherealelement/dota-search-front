@@ -7,9 +7,9 @@ import ItemStatusFilter from '../item-status-filter';
 import ItemAdd from '../item-add';
 import './app.css';
 import DotaSearchService from '../../services/DotaSearchService';
-import {ItemType, getId, User} from '../../shared';
+import {ItemType, getId, Player} from '../../shared';
 import {cloneDeep} from 'lodash';
-import {FIXMELATER} from "../../shared/Constants";
+import {FIXMELATER, HttpStatusCode} from "../../shared/Constants";
 
 export default class App extends Component {
     state = {
@@ -76,31 +76,36 @@ export default class App extends Component {
         });
     };
 
-    updateUsers = () => {
-        this.api.getAllUsers()
+    updatePlayers = () => {
+        this.api.getAllPlayers()
             .then(this.onPlayersLoaded);
     };
 
     FilterChangeCallbacks = {
         [ItemType.MESSAGE]: this.updateMessages,
         [ItemType.COMMAND]: this.updateCommands,
-        [ItemType.PLAYER]: this.updateUsers,
+        [ItemType.PLAYER]: this.updatePlayers,
     };
 
-    addItem = (_user: User) => {
+    addItem = (_player: Player) => {
         const {player} = this.state;
-        this.api.postUser(cloneDeep(_user)).then(() => {
+        const p = cloneDeep(_player);
+        this.api.postPlayer(p).then((r) => {
+            if (r.status === HttpStatusCode.OK) { // updated
+                this.updatePlayers();
+                return;
+            }
             if (player) {
                 this.setState({
                     player: [
                         // @ts-ignore
                         ...player,
-                        _user,
+                        _player,
                     ],
                 });
             } else {
                 this.setState({
-                    user: [_user],
+                    [ItemType.PLAYER]: [_player],
                 });
             }
         });

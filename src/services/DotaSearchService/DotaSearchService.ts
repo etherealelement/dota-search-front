@@ -1,8 +1,10 @@
 import {FIXMELATER, HttpStatusCode} from "../../shared/Constants";
+import {Positions,Player} from "../../shared";
 
 const defaultHeaders = {
     'Accept': '*/*',
 };
+
 
 export default class DotaSearchService {
     _apiBase = 'http://95.31.249.76:322';
@@ -30,11 +32,11 @@ export default class DotaSearchService {
             return {error: 'Too many requests.', status: 'error'};
         if (response.status === HttpStatusCode.BadRequest)
             return {error: await response.text(), status: 'error'};
-        return response.json();
+        return response;
     }
 
-    async getAllUsers() {
-        const users = await this.getResource('/user');
+    async getAllPlayers() {
+        const users = await this.getResource('/player');
         return Object.values(users).map(this._transformUser);
     }
 
@@ -63,7 +65,7 @@ export default class DotaSearchService {
     }
 
     async getUser(id: string) {
-        const user = await this.getResource('/user/' + id);
+        const user = await this.getResource('/player/' + id);
         return this._transformUser(user);
     }
 
@@ -73,11 +75,12 @@ export default class DotaSearchService {
     }
 
     _transformUser(user: FIXMELATER) {
+        console.log("transforming user:", user);
         return {
             Login: user.login,
             MMR: user.mmr,
             Link: user.link,
-            PossiblePos: user.possible_pos,
+            PossiblePos: Positions.FromArray(user.possible_pos),
         };
     }
 
@@ -100,17 +103,11 @@ export default class DotaSearchService {
         };
     }
 
-    _toPostPossiblePos(possiblePos: FIXMELATER) {
-        return {
-            hard_support: possiblePos.HardSupport,
-            soft_support: possiblePos.SoftSupport,
-            offlane: possiblePos.Offlane,
-            midlane: possiblePos.Midlane,
-            carry: possiblePos.Carry,
-        };
+    _toPostPossiblePos(possiblePos: Positions) {
+        return Positions.ToArray(possiblePos);
     }
 
-    _toPostUser(user: FIXMELATER) {
+    _toPostUser(user: Player) {
         return {
             login: user.Login,
             link: user.Link,
@@ -119,7 +116,8 @@ export default class DotaSearchService {
         };
     }
 
-    async postUser(user: FIXMELATER) {
-        return this.postResource('/user', this._toPostUser(user));
+    async postPlayer(user: Player) {
+        console.log("posting user: ", user);
+        return this.postResource('/player', this._toPostUser(user));
     }
 }

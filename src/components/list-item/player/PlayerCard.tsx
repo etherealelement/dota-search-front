@@ -1,9 +1,9 @@
-import './User.css';
+import './player.css';
 import {Positions} from "../../../shared";
 import {MessageProps} from "../message/Message";
 
 
-export class UserProps {
+export class PlayerProps {
     Login: string = '';
     Link: string = '';
     MMR: string = '';
@@ -24,7 +24,7 @@ export const toPositions=(p:Positions)=>{
 }
 
 
-const UserCard = (props: UserProps) => {
+const PlayerCard = (props: PlayerProps) => {
     const {Login, Link, MMR, PossiblePos, itemType} = props;
 
     return (    // @ts-ignore
@@ -50,4 +50,4 @@ const UserCard = (props: UserProps) => {
     );
 };
 
-export default UserCard;
+export default PlayerCard;

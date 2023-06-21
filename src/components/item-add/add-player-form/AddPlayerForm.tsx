@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import './AddPlayerForm.css';
-import {addKeyId, isInDesiredForm, isValidHttpUrl, POSITIONS, QUINN_MMR, User} from '../../../shared';
+import {addKeyId, isInDesiredForm, isValidHttpUrl, POSITIONS, QUINN_MMR, Player} from '../../../shared';
 import {CheckboxInput, TextInput} from '../../common/inputs'
 import {CheckBoxKeys, TextInputKeys} from '../../../shared/Constants';
 
@@ -10,7 +10,7 @@ const ph = {
     MMR: 'Введите свой ММР',
 };
 
-const isFieldsInvalid = (user: User, setError:(s:string)=>void) => {
+const isFieldsInvalid = (user: Player, setError:(s:string)=>void) => {
     if (!user.Login) {
         setError(`Please, specify your login.`);
         return true;
@@ -34,8 +34,8 @@ const isFieldsInvalid = (user: User, setError:(s:string)=>void) => {
     return false;
 };
 
-const AddPlayerForm = (props: { onAddItem: (v:User)=>void }) => {
-    const [user, setUser] = useState(new User());
+const AddPlayerForm = (props: { onAddItem: (v:Player)=>void }) => {
+    const [user, setUser] = useState(new Player());
     const [error, setError] = useState('');
     const {onAddItem} = props;
 
@@ -53,14 +53,14 @@ const AddPlayerForm = (props: { onAddItem: (v:User)=>void }) => {
         e.preventDefault();
         if (isFieldsInvalid(user, setError)) return;
         setError('');
-        const nUser = addKeyId(user, 'player_') as User;
+        const nUser = addKeyId(user, 'player_') as Player;
         onAddItem(nUser);
         setUser({
-            ...new User(),
+            ...new Player(),
         });
     }, [user, onAddItem]);
     // @ts-ignore
-    const inputs = ['Login', 'Link', 'MMR'].map(el => <TextInput name={el} placeholder={ph[el]} user={user} onChange={onChange} key={TextInputKeys[el]}/>);
+    const inputs = ['Login', 'Link', 'MMR'].map(el => <TextInput name={el} placeholder={ph[el]} player={user} onChange={onChange} key={TextInputKeys[el]}/>);
     // @ts-ignore
     const checkboxes = POSITIONS.map(el => <CheckboxInput name={el} value={user.PossiblePos[el]} onChange={onChange} childrn={el} key={CheckBoxKeys[el]}/>);
     return (

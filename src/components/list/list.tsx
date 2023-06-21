@@ -2,9 +2,7 @@ import ListItem from '../list-item';
 import './list.css';
 import Loader from '../common/loader';
 import {FIXMELATER} from "../../shared/Constants";
-import UserCard from "../list-item/user";
-import Message from "../list-item/message";
-import {size} from "lodash";
+
 
 const List = (props: FIXMELATER) => {
     const {items, loaded} = props;
