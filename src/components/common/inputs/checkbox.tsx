@@ -15,3 +15,18 @@ export const CheckboxInput = (props: FIXMELATER) => {
         </div>
     );
 };
+
+export const CheckboxInput2 = (props: FIXMELATER) => {
+    const [id] = useState(getId('checkbox2_'));
+    return (
+        // @ts-ignore
+        <div className="checkbox-wrapper-2">
+            <input className="plus-minus" type="checkbox" id={id} key={id} checked={props.value}
+                   onChange={props.onChange}
+                   name={props.name} {...props}/>
+            {/*{props.childrn}*/}
+            {/*<label className="tgl-btn" data-tg-off="Nope" data-tg-on="Yeah!" htmlFor={id}/>*/}
+            <span className="list-item"> {props.childrn} </span>
+        </div>
+    );
+};

@@ -66,3 +66,15 @@ export const CheckBoxKeys = {
     Midlane: getId('checkbox_input_'),
     Carry: getId('checkbox_input_'),
 }
+
+export const CommandPH = {
+    Login: 'Общая информация',
+    Link: 'Ссылка на телеграм или любой другой вид связи',
+    MMR: 'Приблизтельный ММР команды',
+};
+
+export const PlayerPH = {
+    Login: 'Введите никнейм',
+    Link: 'Ссылка на телеграм или любой другой вид связи',
+    MMR: 'Введите свой ММР',
+};

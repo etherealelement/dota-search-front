@@ -2,15 +2,10 @@ import React, {useCallback, useState} from 'react';
 import './AddPlayerForm.css';
 import {addKeyId, isInDesiredForm, isValidHttpUrl, POSITIONS, QUINN_MMR, Player} from '../../../shared';
 import {CheckboxInput, TextInput} from '../../common/inputs'
-import {CheckBoxKeys, TextInputKeys} from '../../../shared/Constants';
+import {CheckBoxKeys, TextInputKeys, PlayerPH as ph, CommandPH as cph} from '../../../shared/Constants';
 
-const ph = {
-    Login: 'Введите никнейм',
-    Link: 'Ссылка на телеграм или любой другой вид связи',
-    MMR: 'Введите свой ММР',
-};
 
-const isFieldsInvalid = (user: Player, setError:(s:string)=>void) => {
+export const isFieldsInvalid = (user: Player, setError:(s:string)=>void) => {
     if (!user.Login) {
         setError(`Please, specify your login.`);
         return true;
@@ -34,35 +29,56 @@ const isFieldsInvalid = (user: Player, setError:(s:string)=>void) => {
     return false;
 };
 
-const AddPlayerForm = (props: { onAddItem: (v:Player)=>void }) => {
-    const [user, setUser] = useState(new Player());
+const AddPlayerForm = (props: { onAddPlayer: (v:Player)=>void; onAddCommand: (v:Player)=>void;  isPlayer: boolean}) => {
+    const [player, setPlayer] = useState(new Player());
+    const [command, setCommand] = useState(new Player());
     const [error, setError] = useState('');
-    const {onAddItem} = props;
+    const {onAddPlayer, onAddCommand, isPlayer} = props;
 
     const onChange = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
         // @ts-ignore
         const {type, name, checked, value} = e.target;
         if (type === 'checkbox') {
-            setUser({...user, PossiblePos: {...user.PossiblePos, [name]: checked}});
+            if (isPlayer)
+                setPlayer({...player, PossiblePos: {...player.PossiblePos, [name]: checked}});
+            else
+                setCommand({...command, PossiblePos: {...command.PossiblePos, [name]: checked}});
         } else {
             e.preventDefault();
-            setUser({...user, [name]: value});
+            if (isPlayer)
+                setPlayer({...player, [name]: value});
+            else
+                setCommand({...command, [name]: value});
         }
-    }, [user]);
+    }, [player,command, isPlayer]);
     const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        if (isFieldsInvalid(user, setError)) return;
+        let curItem = command;
+        if (isPlayer) curItem = player;
+        if (isFieldsInvalid(curItem, setError)) return;
         setError('');
-        const nUser = addKeyId(user, 'player_') as Player;
-        onAddItem(nUser);
-        setUser({
-            ...new Player(),
-        });
-    }, [user, onAddItem]);
+        const nItem = addKeyId(curItem, 'player_') as Player;
+        if (isPlayer) {
+            onAddPlayer(nItem);
+            setPlayer({
+                ...new Player(),
+            });
+        } else{
+            onAddCommand(nItem);
+            setCommand({
+                ...new Player(),
+            });
+
+        }
+    }, [player,command, isPlayer]);
+    let cur_ph = cph;
+    if (isPlayer) {
+        cur_ph = ph;
+    }
     // @ts-ignore
-    const inputs = ['Login', 'Link', 'MMR'].map(el => <TextInput name={el} placeholder={ph[el]} player={user} onChange={onChange} key={TextInputKeys[el]}/>);
+    const inputs = ['Login', 'Link', 'MMR'].map(el => <TextInput name={el} placeholder={cur_ph[el]} player={isPlayer?player:command} onChange={onChange} key={TextInputKeys[el]}/>);
     // @ts-ignore
-    const checkboxes = POSITIONS.map(el => <CheckboxInput name={el} value={user.PossiblePos[el]} onChange={onChange} childrn={el} key={CheckBoxKeys[el]}/>);
+    const checkboxes = POSITIONS.map(el => <CheckboxInput name={el} value={(isPlayer?player:command).PossiblePos[el]} onChange={onChange} childrn={el} key={CheckBoxKeys[el]}/>);
     return (
         // @ts-ignore
         <form

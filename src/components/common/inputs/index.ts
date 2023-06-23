@@ -1,3 +1,3 @@
-import {CheckboxInput} from './checkbox';
+import {CheckboxInput, CheckboxInput2} from './checkbox';
 import {TextInput} from './text';
-export {CheckboxInput, TextInput};
+export {CheckboxInput, CheckboxInput2, TextInput};

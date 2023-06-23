@@ -1,15 +1,13 @@
-import './player.css';
+import './CommandCard.css';
 import {Positions} from "../../../shared";
-import {MessageProps} from "../message/Message";
 
 
-export class PlayerProps {
+export class CommandCardProps {
     Login: string = '';
     Link: string = '';
     MMR: string = '';
     PossiblePos: Positions = new Positions();
     itemType: string = '';
-    playerPositions: string[] = [];
     key: string = '';
 }
 
@@ -24,7 +22,7 @@ export const toPositions=(p:Positions)=>{
 }
 
 
-const PlayerCard = (props: PlayerProps) => {
+const CommandCard = (props: CommandCardProps) => {
     const {Login, Link, MMR, PossiblePos, itemType} = props;
 
     return (    // @ts-ignore
@@ -50,4 +48,4 @@ const PlayerCard = (props: PlayerProps) => {
     );
 };
 
-export default PlayerCard;
+export default CommandCard;

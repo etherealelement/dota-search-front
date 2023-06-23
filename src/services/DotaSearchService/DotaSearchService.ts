@@ -1,5 +1,5 @@
 import {FIXMELATER, HttpStatusCode} from "../../shared/Constants";
-import {Positions,Player} from "../../shared";
+import {Player, Positions} from "../../shared";
 
 const defaultHeaders = {
     'Accept': '*/*',
@@ -16,10 +16,7 @@ export default class DotaSearchService {
         };
         const request = new Request(this._apiBase + url, options);
 
-        const response = await fetch(request);
-        // }
-        if (response.status === HttpStatusCode.NoContent) return {};
-        return response.json();
+        return await fetch(request);
     }
 
     async postResource(url: string, value: FIXMELATER) {
@@ -36,19 +33,25 @@ export default class DotaSearchService {
     }
 
     async getAllPlayers() {
-        const users = await this.getResource('/player');
+        const response = await this.getResource('/player');
+        if ([HttpStatusCode.NoContent, HttpStatusCode.TooManyRequests].includes(response.status)) return [];
+        const users = await response.json();
         return Object.values(users).map(this._transformUser);
     }
 
     async getAllCommands() {
-        const commands = await this.getResource('/command');
+        const response = await this.getResource('/command');
+        if ([HttpStatusCode.NoContent, HttpStatusCode.TooManyRequests].includes(response.status)) return [];
+        const commands = await response.json();
         return Object.values(commands).map(this._transformCommand);
     }
 
     async getAllMessages(all: boolean) {
         let link = '/message';
         if (all) link += '?all=true';
-        const messages = await this.getResource(link);
+        const response = await this.getResource(link);
+        if (response.status === HttpStatusCode.NoContent) return [];
+        const messages = await response.json();
         return Object.values(messages).map(this._transformMessage).sort(({Timestamp}, b) => {
             if (Timestamp !== b.Timestamp) {
                 if (Timestamp < b.Timestamp)
@@ -75,7 +78,6 @@ export default class DotaSearchService {
     }
 
     _transformUser(user: FIXMELATER) {
-        console.log("transforming user:", user);
         return {
             Login: user.login,
             MMR: user.mmr,
@@ -86,11 +88,10 @@ export default class DotaSearchService {
 
     _transformCommand(command: FIXMELATER) {
         return {
-            ID: command.ID,
-            MMR: command.MMR,
-            Disperce: command.Disperse,
-            FreePos: command.FreePos,
-            Link: command.Link,
+            Login: command.data,
+            MMR: command.mmr,
+            Link: command.link,
+            PossiblePos: Positions.FromArray(command.possible_pos),
         };
     }
 
@@ -119,5 +120,19 @@ export default class DotaSearchService {
     async postPlayer(user: Player) {
         console.log("posting user: ", user);
         return this.postResource('/player', this._toPostUser(user));
+    }
+
+    _toPostCommand(command: Player) {
+        return {
+            data: command.Login,
+            link: command.Link,
+            mmr: Number(command.MMR),
+            possible_pos: this._toPostPossiblePos(command.PossiblePos),
+        };
+    }
+
+    async postCommand(command: Player) {
+        console.log("posting command: ", command);
+        return this.postResource('/command', this._toPostCommand(command));
     }
 }

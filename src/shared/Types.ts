@@ -1,8 +1,8 @@
 import {ItemType} from "./Constants";
 
 const posToString ={
-    5: 'Hard Support',
-    4: 'Soft Support',
+    5: 'HardSupport',
+    4: 'SoftSupport',
     3: 'Offlane',
     2: 'Midlane',
     1: 'Carry',
@@ -15,14 +15,18 @@ const stringToPos ={
     'Carry': 1,
 }
 export class Positions {
-    HardSupport: boolean = false
-    SoftSupport: boolean = false
-    Offlane: boolean = false
-    Midlane: boolean = false
-    Carry: boolean = false
+    HardSupport: boolean = true
+    SoftSupport: boolean = true
+    Offlane: boolean = true
+    Midlane: boolean = true
+    Carry: boolean = true
 
     static FromArray(a:number[]) {
         const positions = new Positions();
+        Object.entries(positions).forEach(([k,v])=>{
+            // @ts-ignore
+            positions[k] = !v;
+        });
         a.map(p=> { // @ts-ignore
             positions[posToString[p]] = true
         });
