@@ -174,6 +174,7 @@ export default class App extends Component {
         if (term.trim() === '') return arr;
         switch (this.state.filter.itemType) {
             case "player":
+            case "command":
                 // @ts-ignore
                 return arr.filter(({Login}) => {
                     const lowerLabel = Login.toLowerCase();

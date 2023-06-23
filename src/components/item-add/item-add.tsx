@@ -54,7 +54,7 @@ export const ItemAdd = (props: { onAddPlayer: (q:FIXMELATER)=>void; itemType: FI
             </div>
             <Modal active={modalActive} setActive={setModalActive}>
                 <AddPlayerForm
-                    onAddPlayer={onSubmitCommand} isPlayer={true}
+                    onAddPlayer={onSubmitPlayer} isPlayer={true}
                 />
             </Modal>
         </div>
