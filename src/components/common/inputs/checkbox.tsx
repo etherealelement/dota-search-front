@@ -1,15 +1,14 @@
 import {useState} from 'react';
-import {getId} from '../../../shared';
-import { Checkbox } from '@mui/joy';
+import {getId, ItemType, POSITIONS, Positions} from '../../../shared';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt'; // no
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation'; // hard support
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement'; // soft support
-import WheelchairPickupIcon from '@mui/icons-material/WheelchairPickup'; // offlane
+import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward'; // offlane
 import Woman2Icon from '@mui/icons-material/Woman2'; // midlane
 import SportsMartialArtsIcon from '@mui/icons-material/SportsMartialArts'; // carry
 import {FIXMELATER} from "../../../shared/Constants";
-import {ThemeProvider} from "@mui/material/styles";
-import {darkTheme} from "../../app/app";
+import {Checkbox, FormControlLabel} from "@mui/material";
+import * as React from "react";
 
 export const CheckboxInput = (props: FIXMELATER) => {
     const [id] = useState(getId('checkbox_'));
@@ -40,13 +39,18 @@ export const CheckboxInput2 = (props: FIXMELATER) => {
     );
 };
 
-export const CheckboxInput3 = (props: FIXMELATER) =>{
-    // return <Checkbox uncheckedIcon={<DoNotDisturbAltIcon />} label="I have an icon when unchecked" />
-    // @ts-ignore
-    darkTheme.vars = {fontSize:14, fontFamily:{body:'default'}};
-    return(
-    <ThemeProvider theme={darkTheme}>
-        <Checkbox />
-    </ThemeProvider>
+const PosToIcon = {
+    HardSupport: <BabyChangingStationIcon/>,
+    SoftSupport: <SelfImprovementIcon/>,
+    Offlane: <AccessibleForwardIcon/>,
+    Midlane: <Woman2Icon/>,
+    Carry: <SportsMartialArtsIcon/>,
+};
+
+export const CheckboxInput3 = (props: FIXMELATER) => {
+    const [key] = useState(getId('checkbox3_'));
+    return (
+        // @ts-ignore
+        <FormControlLabel onChange={props.onChange} name={props.name} key={key}  control={<Checkbox defaultChecked icon={<DoNotDisturbAltIcon/>} checkedIcon={PosToIcon[props.name]} />} label={props.childrn} />
     );
-}
+};

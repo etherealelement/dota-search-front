@@ -4,8 +4,6 @@ import {Player, Positions} from "../../shared";
 const defaultHeaders = {
     'Accept': '*/*',
 };
-
-
 export default class DotaSearchService {
     _apiBase = 'http://95.31.249.76:322';
 
