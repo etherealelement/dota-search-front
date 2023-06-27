@@ -1,14 +1,10 @@
 import {useState} from 'react';
-import {getId, ItemType, POSITIONS, Positions} from '../../../shared';
+import {getId} from '../../../shared';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt'; // no
-import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation'; // hard support
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement'; // soft support
-import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward'; // offlane
-import Woman2Icon from '@mui/icons-material/Woman2'; // midlane
-import SportsMartialArtsIcon from '@mui/icons-material/SportsMartialArts'; // carry
 import {FIXMELATER} from "../../../shared/Constants";
 import {Checkbox, FormControlLabel} from "@mui/material";
 import * as React from "react";
+import PosToIcon from '../icons'
 
 export const CheckboxInput = (props: FIXMELATER) => {
     const [id] = useState(getId('checkbox_'));
@@ -37,14 +33,6 @@ export const CheckboxInput2 = (props: FIXMELATER) => {
             <span className="list-item"> {props.childrn} </span>
         </div>
     );
-};
-
-const PosToIcon = {
-    HardSupport: <BabyChangingStationIcon/>,
-    SoftSupport: <SelfImprovementIcon/>,
-    Offlane: <AccessibleForwardIcon/>,
-    Midlane: <Woman2Icon/>,
-    Carry: <SportsMartialArtsIcon/>,
 };
 
 export const CheckboxInput3 = (props: FIXMELATER) => {
