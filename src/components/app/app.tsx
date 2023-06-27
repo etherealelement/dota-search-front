@@ -10,9 +10,19 @@ import DotaSearchService from '../../services/DotaSearchService';
 import {ItemType, getId, Player, Positions} from '../../shared';
 import {cloneDeep} from 'lodash';
 import {FIXMELATER, HttpStatusCode} from "../../shared/Constants";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import {TypeText} from "@mui/material/styles/createPalette";
+
+export const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+},
+);
 
 class Filter {
-    itemType: string=ItemType.MESSAGE
+    itemType: string = ItemType.MESSAGE
     positions: Positions = new Positions()
     MMR: number[] = [0,12000]
 }
@@ -242,7 +252,9 @@ export default class App extends Component {
         const messages = message.length;
         return (
             // @ts-ignore
-            <div className="app">
+            <main className="app">
+                <ThemeProvider theme={darkTheme}>
+                    <CssBaseline />
                 <AppHeader players={players} commands={commands} messages={messages} itemType={filter.itemType} onMMRChange={this.changeFilterPart} onPositionChange={this.changeFilterPart}/>
                 <div className="top-panel d-flex">
                     <SearchPanel onChangeSearch={this.changeSearch} term={term}/>
@@ -255,7 +267,8 @@ export default class App extends Component {
                     term={term}
                 />
                 <ItemAdd onAddPlayer={this.addPlayer} itemType={filter.itemType} onAddCommand={this.addCommand}/>
-            </div>
+                </ThemeProvider>
+            </main>
         );
     }
 }

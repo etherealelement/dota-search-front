@@ -1,8 +1,9 @@
 import "./filter-panel.css"
 import {POSITIONS, Positions} from "../../shared";
-import {CheckboxInput2} from "../common/inputs";
+import {CheckboxInput2, CheckboxInput3} from "../common/inputs";
 import {CheckBoxKeys, FIXMELATER} from "../../shared/Constants";
 import {useCallback, useState} from "react";
+import {darkTheme} from "../app/app";
 import * as React from 'react';
 import Slider from '@mui/material/Slider';
 
@@ -50,6 +51,20 @@ export const FilterPanel = ({itemType, onPositionChange, onMMRChange})=> {
             getAriaValueText={valuetext}
             min={0}
             max={12000}
+            sx={{
+            '& .MuiSlider-thumb': {
+                color: "#361783"
+            },
+            '& .MuiSlider-track': {
+                color: "#2f1144"
+            },
+            '& .MuiSlider-rail': {
+                color: "#42345b"
+            },
+            '& .MuiSlider-active': {
+                color: "#ac33e3"
+            }
+        }}
         />
         <span className="justify-content-evenly d-flex flex-row">
             {checkboxes}
