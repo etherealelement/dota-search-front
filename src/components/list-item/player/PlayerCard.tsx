@@ -1,38 +1,26 @@
 import './player.css';
 import {Positions} from "../../../shared";
-import {MessageProps} from "../message/Message";
+import {toPositions} from "../../common/icons/positions";
 
 
 export class PlayerProps {
-    Login: string = '';
+    Data: string = '';
     Link: string = '';
     MMR: string = '';
     PossiblePos: Positions = new Positions();
     itemType: string = '';
-    playerPositions: string[] = [];
     key: string = '';
 }
 
-export const toPositions=(p:Positions)=>{
-    return JSON.stringify(Object.entries(p)
-        .filter(([a, b]) => b)
-        .map(([a, b])=>a))
-        .replace('[', '')
-        .replace(']', '')
-        .replaceAll('"', '')
-        .replaceAll(',', ', ');
-}
-
-
 const PlayerCard = (props: PlayerProps) => {
-    const {Login, Link, MMR, PossiblePos, itemType} = props;
+    const {Data, Link, MMR, PossiblePos, itemType} = props;
 
     return (    // @ts-ignore
         <div className="row container-fluid list-item">
             <div className="col border border-info border-opacity-25">
             <span
                 className={'list-item-label'}>
-                {Login}
+                {Data}
             </span>
             </div>
             <div className="col-2 border border-info border-opacity-25 player-positions">

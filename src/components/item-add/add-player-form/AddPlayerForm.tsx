@@ -6,7 +6,7 @@ import {CheckBoxKeys, TextInputKeys, PlayerPH as ph, CommandPH as cph} from '../
 
 
 export const isFieldsInvalid = (user: Player, setError:(s:string)=>void) => {
-    if (!user.Login) {
+    if (!user.Data) {
         setError(`Please, specify your login.`);
         return true;
     }
@@ -76,7 +76,7 @@ const AddPlayerForm = (props: { onAddPlayer: (v:Player)=>void; onAddCommand: (v:
         cur_ph = ph;
     }
     // @ts-ignore
-    const inputs = ['Login', 'Link', 'MMR'].map(el => <TextInput name={el} placeholder={cur_ph[el]} player={isPlayer?player:command} onChange={onChange} key={TextInputKeys[el]}/>);
+    const inputs = ['Data', 'Link', 'MMR'].map(el => <TextInput name={el} placeholder={cur_ph[el]} player={isPlayer?player:command} onChange={onChange} key={TextInputKeys[el]}/>);
     // @ts-ignore
     const checkboxes = POSITIONS.map(el => <CheckboxInput name={el} value={(isPlayer?player:command).PossiblePos[el]} onChange={onChange} childrn={el} key={CheckBoxKeys[el]}/>);
     return (

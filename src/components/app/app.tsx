@@ -13,6 +13,7 @@ import {FIXMELATER, HttpStatusCode} from "../../shared/Constants";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {TypeText} from "@mui/material/styles/createPalette";
+import useWebSocket from 'react-use-websocket';
 
 export const darkTheme = createTheme({
     palette: {
@@ -38,10 +39,56 @@ export default class App extends Component {
         loaded: {},
     };
     api = new DotaSearchService();
+    wsMsgs: FIXMELATER = [];
+    wsPlayers: FIXMELATER = [];
+    wsCommands: FIXMELATER = [];
 
+    processWsMessage =(v: FIXMELATER)=>{
+        v.key = getId(v.itemType);
+        switch (v.itemType) {
+        case ItemType.MESSAGE:
+            this.wsMsgs.push(v);
+            this.setState({
+                [ItemType.MESSAGE]: [
+                    // @ts-ignore
+                    ...this.state[ItemType.MESSAGE],
+                    ...this.wsMsgs,
+                ]
+            });
+            break;
+        case ItemType.PLAYER:
+                this.wsPlayers.push(v);
+                this.setState({
+                    [ItemType.PLAYER]: [
+                        // @ts-ignore
+                        ...this.state[ItemType.PLAYER].filter((pp: Player) => {
+                            // console.log(`Comparing ${p.Ip} with ${pp.Ip}`);
+                            return v.Ip !== pp.Ip;
+                        }),
+                        ...this.wsPlayers,
+                    ]
+                });
+                break;
+            case ItemType.COMMAND:
+                this.wsCommands.push(v);
+                this.setState({
+                    [ItemType.COMMAND]: [
+                        // @ts-ignore
+                        ...this.state[ItemType.COMMAND].filter((pp: Player) => {
+                            return v.Ip !== pp.Ip;
+                        }),
+                        ...this.wsCommands,
+                    ],
+                });
+            break;
+        }
+    }
     constructor(props : {}) {
         super(props);
-        this.updateMessages();
+        // this.updateCommands();
+        // this.updatePlayers();
+        // this.updateMessages();
+        this.api.SetWsOnMessage(this.processWsMessage);
     }
 
     FromMessage = (v:FIXMELATER) => {
@@ -54,124 +101,131 @@ export default class App extends Component {
         };
     };
 
-    onMessagesLoaded = (msgs: FIXMELATER[]) => {
-        this.setState({
-            message: [
-                ...msgs.map(this.FromMessage).filter(el =>
-                    // no empty, null, or undefined messages
-                    (el.Data?.length),
-                ),
-            ],
-            loaded: {...this.state.loaded, [ItemType.MESSAGE]: true},
-        });
-    };
+    // onMessagesLoaded = (msgs: FIXMELATER[]) => {
+    //     this.setState({
+    //         message: [
+    //             ...msgs.map(this.FromMessage).filter(el =>
+    //                 // no empty, null, or undefined messages
+    //                 (el.Data?.length),
+    //             ),
+    //         ],
+    //         // loaded: {...this.state.loaded, [ItemType.MESSAGE]: true},
+    //     });
+    // };
 
-    onPlayersLoaded = (players: FIXMELATER[]) => {
-        const converted = players.map(el => {
-            const id = getId('player_');
-            el.itemType = ItemType.PLAYER;
-            el.key = id;
-            el.id = id;
-            return el;
-        });
-        this.setState({
-            player: [
-                ...converted,
-            ],
-            loaded: {...this.state.loaded, [ItemType.PLAYER]: true},
-        });
-    };
+    // onPlayersLoaded = (players: FIXMELATER[]) => {
+    //     const converted = players.map(el => {
+    //         const id = getId('player_');
+    //         el.itemType = ItemType.PLAYER;
+    //         el.key = id;
+    //         el.id = id;
+    //         return el;
+    //     });
+    //     this.setState({
+    //         player: [
+    //             ...converted,
+    //         ],
+    //         // loaded: {...this.state.loaded, [ItemType.PLAYER]: true},
+    //     });
+    // };
 
-    onCommandsLoaded = (commands: FIXMELATER[]) => {
-        const converted = commands.map(el => {
-            const id = getId('command_');
-            el.itemType = ItemType.COMMAND;
-            el.key = id;
-            el.id = id;
-            return el;
-        });
-        this.setState({
-            command: [
-                ...converted,
-            ],
-            loaded: {...this.state.loaded, [ItemType.COMMAND]: true},
-        });
-    };
+    // onCommandsLoaded = (commands: FIXMELATER[]) => {
+    //     const converted = commands.map(el => {
+    //         const id = getId('command_');
+    //         el.itemType = ItemType.COMMAND;
+    //         el.key = id;
+    //         el.id = id;
+    //         return el;
+    //     });
+    //     this.setState({
+    //         command: [
+    //             ...converted,
+    //         ],
+    //         // loaded: {...this.state.loaded, [ItemType.COMMAND]: true},
+    //     });
+    // };
 
 
-    updateMessages = () => {
-        this.api.getAllMessages(false)
-            .then(this.onMessagesLoaded);
-    };
+    // updateMessages = () => {
+    //     this.api.getAllMessages(false)
+    //         .then(this.onMessagesLoaded);
+    // };
 
-    updateCommands = () => {
-        this.api.getAllCommands()
-            .then(this.onCommandsLoaded);
-    };
-
-    updatePlayers = () => {
-        this.api.getAllPlayers()
-            .then(this.onPlayersLoaded);
-    };
-
-    FilterChangeCallbacks = {
-        [ItemType.MESSAGE]: this.updateMessages,
-        [ItemType.COMMAND]: this.updateCommands,
-        [ItemType.PLAYER]: this.updatePlayers,
-    };
+    // updateCommands = () => {
+    //     this.api.getAllCommands()
+    //         .then(this.onCommandsLoaded);
+    // };
+    //
+    // updatePlayers = () => {
+    //     this.api.getAllPlayers()
+    //         .then(this.onPlayersLoaded);
+    // };
+    //
+    // FilterChangeCallbacks = {
+    //     [ItemType.MESSAGE]: this.updateMessages,
+    //     [ItemType.COMMAND]: this.updateCommands,
+    //     [ItemType.PLAYER]: this.updatePlayers,
+    // };
 
     addPlayer = (_player: Player) => {
-        const {player} = this.state;
-        const p = cloneDeep(_player);
-        this.api.postPlayer(p).then((r) => {
-            if (r.status === HttpStatusCode.OK) { // updated
-                this.updatePlayers();
-                return;
-            }
-            if (player) {
-                this.setState({
-                    player: [
-                        // @ts-ignore
-                        ...player,
-                        _player,
-                    ],
-                });
-            } else {
-                this.setState({
-                    [ItemType.PLAYER]: [_player],
-                });
-            }
-        });
+        // console.log("sending to ws")
+        this.api.SendToWs(_player);
+        // console.log("sended")
+        // const {player} = thi s.state;
+        // const p = cloneDeep(_player);
+        // this.api.postPlayer(p).then((r) => {
+        //     if (r.status === HttpStatusCode.OK) { // updated
+        //         this.updatePlayers();
+        //         return;
+        //     }
+        //     if (player) {
+        //         this.setState({
+        //             player: [
+        //                 // @ts-ignore
+        //                 ...player,
+        //                 _player,
+        //             ],
+        //         });
+        //     } else {
+        //         this.setState({
+        //             [ItemType.PLAYER]: [_player],
+        //         });
+        //     }
+        // });
     };
     addCommand = (_command: Player) => {
-        const {command} = this.state;
-        const p = cloneDeep(_command);
-        this.api.postCommand(p).then((r) => {
-            if (r.status === HttpStatusCode.OK) { // updated
-                this.updateCommands();
-                return;
-            }
-            if (command) {
-                this.setState({
-                    command: [
-                        // @ts-ignore
-                        ...command,
-                        _command,
-                    ],
-                });
-            } else {
-                this.setState({
-                    [ItemType.COMMAND]: [_command],
-                });
-            }
-        });
+        // console.log("sending to ws")
+        _command.itemType = 'command';
+        this.api.SendToWs(_command);
+        // console.log("sended")
+        // const {command} = this.state;
+        // const p = cloneDeep(_command);
+        // this.api.postCommand(p).then((r) => {
+        //     if (r.status === HttpStatusCode.OK) { // updated
+        //         this.updateCommands();
+        //         return;
+        //     }
+        //     if (command) {
+        //         this.setState({
+        //             command: [
+        //                 // @ts-ignore
+        //                 ...command,
+        //                 _command,
+        //             ],
+        //         });
+        //     } else {
+        //         this.setState({
+        //             [ItemType.COMMAND]: [_command],
+        //         });
+        //     }
+        // });
     };
 
     changeFilter = (filter: Filter) => {
-        const {loaded} = this.state;
-        // @ts-ignore
-        if (!loaded[filter.itemType])
-            this.FilterChangeCallbacks[filter.itemType]();
+        // const {loaded} = this.state;
+        // // @ts-ignore
+        // if (!loaded[filter.itemType])
+        //     this.FilterChangeCallbacks[filter.itemType]();
         this.setState({filter: filter});
     };
 
@@ -182,21 +236,21 @@ export default class App extends Component {
 
     filterBySearch = (arr: FIXMELATER, term: FIXMELATER) => {
         if (term.trim() === '') return arr;
-        switch (this.state.filter.itemType) {
-            case "player":
-            case "command":
-                // @ts-ignore
-                return arr.filter(({Login}) => {
-                    const lowerLabel = Login.toLowerCase();
-                    return lowerLabel.indexOf(term.toLowerCase()) > -1;});
-
-            case "message":
+        // switch (this.state.filter.itemType) {
+        //     case "player":
+        //     case "command":
+        //         // @ts-ignore
+        //         return arr.filter(({Data}) => {
+        //             const lowerLabel = Data.toLowerCase();
+        //             return lowerLabel.indexOf(term.toLowerCase()) > -1;});
+        //
+        //     case "message":
                 // @ts-ignore
                 return arr.filter(({Data}) => {
                     const lowerLabel = Data.toLowerCase();
                     return lowerLabel.indexOf(term.toLowerCase()) > -1;
                 });
-        }
+        // }
     };
 
     filterByState = () => {
@@ -239,11 +293,14 @@ export default class App extends Component {
     };
 
     render() {
+        this.wsCommands = [];
+        this.wsMsgs = [];
+        this.wsPlayers =[];
         const {term, filter, message, player, command, loaded} = this.state;
-        let searched = this.filterByState();
-        searched = this.filterBySearch(searched, term);
+        let stated = this.filterByState();
+        const searched = this.filterBySearch(stated, term);
         // @ts-ignore
-        const status = loaded[filter.itemType];
+        // const status = loaded[filter.itemType];
         // @ts-ignore
         const players = player.length;
         // @ts-ignore
@@ -262,7 +319,8 @@ export default class App extends Component {
                 </div>
                 <List
                     items={searched}
-                    loaded={status}
+                    // @ts-ignore
+                    loaded={stated.length != 0}
                     itemType={filter.itemType}
                     term={term}
                 />

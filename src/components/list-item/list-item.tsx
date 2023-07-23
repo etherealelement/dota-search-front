@@ -14,7 +14,7 @@ const ListItem = (props: MessageProps | PlayerProps) => {
             // @ts-ignore
             return <Message {...props}/>;
         case 'command':
-            console.log("rendering command:", props);
+            // console.log("rendering command:", props);
             // @ts-ignore
             return <CommandCard {...props}/>;
         default:

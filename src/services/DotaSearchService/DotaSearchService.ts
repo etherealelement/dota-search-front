@@ -1,11 +1,35 @@
-import {FIXMELATER, HttpStatusCode} from "../../shared/Constants";
+import {FIXMELATER, HttpStatusCode, ItemType} from "../../shared/Constants";
 import {Player, Positions} from "../../shared";
 
 const defaultHeaders = {
     'Accept': '*/*',
 };
 export default class DotaSearchService {
-    _apiBase = 'http://95.31.249.76:322';
+    _urlBase = '95.31.249.76:322';
+    _apiBase = `http://${this._urlBase}`;
+    private ws: WebSocket;
+
+    constructor() {
+        this.ws = new WebSocket(`ws://${this._urlBase}/ws`);
+        this.ws.onopen = () => {
+            console.log(`Websocket connection opened: ${this.ws.url}`)
+        };
+        this.ws.onclose = () => {
+            console.log(`Websocket connection closed: ${this.ws.url}`)
+            this.ws = new WebSocket(`ws://${this._urlBase}/ws`);
+        };
+    }
+
+
+    SendToWs(msg: FIXMELATER){
+        // const data = JSON.stringify(this._toWsMessage(msg))
+        this.ws.send(JSON.stringify(this._toWsMessage(msg)));
+    }
+
+    SetWsOnMessage(callback: FIXMELATER){
+        // this.ws.onmessage = (v)=>callback(this._fromWsMessage(JSON.parse(JSON.parse(v.data))));
+        this.ws.onmessage = (v)=>callback(this._fromWsMessage(JSON.parse(v.data)));
+    }
 
     async getResource(url: string) {
         const options = {
@@ -77,19 +101,21 @@ export default class DotaSearchService {
 
     _transformUser(user: FIXMELATER) {
         return {
-            Login: user.login,
+            Data: user.data,
             MMR: user.mmr,
             Link: user.link,
             PossiblePos: Positions.FromArray(user.possible_pos),
+            Ip: user.ip,
         };
     }
 
     _transformCommand(command: FIXMELATER) {
         return {
-            Login: command.data,
+            Data: command.data,
             MMR: command.mmr,
             Link: command.link,
             PossiblePos: Positions.FromArray(command.possible_pos),
+            Ip: command.ip,
         };
     }
 
@@ -99,6 +125,7 @@ export default class DotaSearchService {
             Data: message.data,
             Link: message.link,
             Timestamp: message.timestamp,
+            Hash: message.hash,
         };
     }
 
@@ -108,29 +135,63 @@ export default class DotaSearchService {
 
     _toPostUser(user: Player) {
         return {
-            login: user.Login,
+            data: user.Data,
             link: user.Link,
             mmr: Number(user.MMR),
             possible_pos: this._toPostPossiblePos(user.PossiblePos),
+            msg_type: 'player',
         };
     }
 
     async postPlayer(user: Player) {
-        console.log("posting user: ", user);
+        // console.log("posting user: ", user);
         return this.postResource('/player', this._toPostUser(user));
     }
 
     _toPostCommand(command: Player) {
         return {
-            data: command.Login,
+            data: command.Data,
             link: command.Link,
             mmr: Number(command.MMR),
             possible_pos: this._toPostPossiblePos(command.PossiblePos),
+            msg_type: 'command',
         };
     }
 
     async postCommand(command: Player) {
-        console.log("posting command: ", command);
+        // console.log("posting command: ", command);
         return this.postResource('/command', this._toPostCommand(command));
+    }
+
+    _fromWsMessage(value:FIXMELATER){
+        let val = Object()
+        switch (value.msg_type){
+            case ItemType.MESSAGE:
+                val= this._transformMessage(value);
+                break;
+            case ItemType.PLAYER:
+                val = this._transformUser(value);
+                break;
+            case ItemType.COMMAND:
+                val = this._transformCommand(value);
+                break;
+            default:
+                console.log(`ERROR websocket message with unknown type: ${value.msg_type}`)
+                break
+        }
+        val.itemType = value.msg_type;
+        val.Ip = value.ip;
+        val.Timestamp = value.timestamp;
+        return val;
+
+    }
+
+    _toWsMessage(value:FIXMELATER){
+        switch (value.itemType){
+            case ItemType.PLAYER:
+                return this._toPostUser(value);
+            case ItemType.COMMAND:
+                return this._toPostCommand(value);
+        }
     }
 }

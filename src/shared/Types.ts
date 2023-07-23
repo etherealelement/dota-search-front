@@ -42,9 +42,10 @@ export class Positions {
 }
 
 export class Player {
-    Login: string = ''
+    Data: string = ''
     Link: string = ''
     MMR: string = ''
     PossiblePos: Positions = new Positions()
     itemType: string = ItemType.PLAYER
+    Ip: string =''
 }

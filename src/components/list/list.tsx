@@ -7,9 +7,17 @@ import {FIXMELATER} from "../../shared/Constants";
 const List = (props: FIXMELATER) => {
     const {items, loaded} = props;
     // @ts-ignore
-    if (!loaded ) return <Loader/>;
+    if (!loaded ) return;
 
-    const elements = items.map((item: FIXMELATER) => {
+    // @ts-ignore
+    const elements = items.sort(({Timestamp}, b) => {
+        if (Timestamp !== b.Timestamp) {
+            if (Timestamp < b.Timestamp)
+                return 1;
+            return -1;
+        }
+        return 0;
+    }).map((item: FIXMELATER) => {
         const {key, ...itemProps} = item;
         return (
             <li key={key} className="list-group-item">

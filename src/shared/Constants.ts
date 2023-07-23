@@ -55,7 +55,7 @@ export const enum HttpStatusCode {
     HttpVersionNotSupported = 505
 }
 export const TextInputKeys = {
-    Login: getId('text_input_'),
+    Data: getId('text_input_'),
     Link: getId('text_input_'),
     MMR: getId('text_input_'),
 }
@@ -68,13 +68,13 @@ export const CheckBoxKeys = {
 }
 
 export const CommandPH = {
-    Login: 'Общая информация',
+    Data: 'Общая информация',
     Link: 'Ссылка на телеграм или любой другой вид связи',
     MMR: 'Приблизтельный ММР команды',
 };
 
 export const PlayerPH = {
-    Login: 'Введите никнейм',
+    Data: 'Введите никнейм',
     Link: 'Ссылка на телеграм или любой другой вид связи',
     MMR: 'Введите свой ММР',
 };
