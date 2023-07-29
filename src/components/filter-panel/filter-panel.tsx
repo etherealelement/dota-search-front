@@ -1,29 +1,17 @@
-import "./filter-panel.css"
 import {POSITIONS, Positions} from "../../shared";
-import {CheckboxInput3} from "../common/inputs";
-import {CheckBoxKeys, FIXMELATER} from "../../shared/Constants";
+import * as React from "react";
 import {useCallback, useState} from "react";
-import * as React from 'react';
-import {FormGroup, Slider} from '@mui/material';
+import {FormGroup} from '@mui/material';
+import {CheckboxesFromPositions, CheckboxesFromPositionsNoText} from "../common/inputs/checkbox";
+import {MySlider} from "../common/inputs/my-slider";
 
-const initialFilterPositions = ()=>{
-    const p = new Positions();
-    Object.keys(p).forEach(k=>{
-        // @ts-ignore
-        p[k] = false;
-    });
-    return p;
-}
-// @ts-ignore
-export const FilterPanel = ({itemType, onPositionChange, onMMRChange})=> {
-    const [positions, setPositions] = useState(new Positions());
-    const [mmr, setMMR] = React.useState<number[]>([0, 12000]);
-    const onChange = useCallback((e:FIXMELATER)=>{
-        if (e.target.type && e.target.type ==="checkbox"){
-            const newState={...positions, [e.target.name]: e.target.checked};
+function FilterOnChangeCallback(positions: Positions, setPositions: (value: (((prevState: Positions) => Positions) | Positions)) => void, onPositionChange: (arg0: { positions: { HardSupport: boolean; SoftSupport: boolean; Offlane: boolean; Midlane: boolean; Carry: boolean; }; }) => void, setMMR: (value: (((prevState: number[]) => number[]) | number[])) => void, onMMRChange: (arg0: { MMR: any; }) => void) {
+    return (e: { target: { type: string; name: any; checked: any; value: ((prevState: number[]) => number[]) | number[]; }; }) => {
+        if (e.target.type && e.target.type === "checkbox") {
+            const newState = {...positions, [e.target.name]: e.target.checked};
             setPositions(newState);
-            const filter = {positions:{...newState}}
-            Object.entries(filter.positions).forEach(([k,v])=>{
+            const filter = {positions: {...newState}}
+            Object.entries(filter.positions).forEach(([k, v]) => {
                 // @ts-ignore
                 filter.positions[k] = v;
             })
@@ -32,41 +20,31 @@ export const FilterPanel = ({itemType, onPositionChange, onMMRChange})=> {
         }
         setMMR(e.target.value);
         onMMRChange({MMR: e.target.value});
-    },[positions,setPositions, mmr,setMMR]);
+    };
+}
+
+// @ts-ignore
+export const FilterPanel = ({itemType, onPositionChange, onMMRChange})=> {
+    const [positions, setPositions] = useState(new Positions());
+    const [mmr, setMMR] = React.useState<number[]>([0, 12000]);
+    const onChange = useCallback(
+        FilterOnChangeCallback(positions, setPositions, onPositionChange, setMMR, onMMRChange),
+        [positions,setPositions, mmr,setMMR]);
 
     if (itemType==='message') { // @ts-ignore
         return <div/>
     }
+    const isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
     // @ts-ignore
-    const checkboxes = POSITIONS.map(el => <CheckboxInput3 name={el} value={positions[el]} onChange={onChange} childrn={el} key={CheckBoxKeys[el]}/>);
+    const checkboxes = POSITIONS.map(CheckboxesFromPositions(positions, onChange));
+    // @ts-ignore
+    const androidCheckboxes = POSITIONS.map(CheckboxesFromPositionsNoText(positions, onChange));
     const valuetext = (e: any)=>(e+"pts").toString();
     return (    // @ts-ignore
-    <form className="filter-panel">
-        <Slider
-            getAriaLabel={() => 'Temperature range'}
-            value={mmr}
-            onChange={onChange}
-            valueLabelDisplay="on"
-            getAriaValueText={valuetext}
-            min={0}
-            max={12000}
-            sx={{
-            '& .MuiSlider-thumb': {
-                color: "#361783"
-            },
-            '& .MuiSlider-track': {
-                color: "#2f1144"
-            },
-            '& .MuiSlider-rail': {
-                color: "#42345b"
-            },
-            '& .MuiSlider-active': {
-                color: "#ac33e3"
-            }
-        }}
-        />
-        <FormGroup className="justify-content-evenly"  row>
-            {checkboxes}
+    <form>
+        <MySlider ariaLabel={() => 'Temperature range'} value={mmr} onChange={onChange} ariaValueText={valuetext}/>
+        <FormGroup row>
+            {isAndroid ? androidCheckboxes : checkboxes}
         </FormGroup>
     </form>
     );

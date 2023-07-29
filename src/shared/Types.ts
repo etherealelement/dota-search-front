@@ -49,3 +49,9 @@ export class Player {
     itemType: string = ItemType.PLAYER
     Ip: string =''
 }
+
+export class Filter {
+    itemType: string = ItemType.MESSAGE
+    positions: Positions = new Positions()
+    MMR: number[] = [0, 12000]
+}

@@ -1,6 +1,7 @@
 import './app-header.css';
 import FilterPanel from "../filter-panel";
 import {FIXMELATER} from "../../shared/Constants";
+import { Stack } from '@mui/material';
 
 export class AppHeaderProps{
     itemType:string = 'command'
@@ -17,11 +18,11 @@ const AppHeader = (props: AppHeaderProps) => {
     // @ts-ignore
     return (
         // @ts-ignore
-        <div className="app-header d-flex justify-content-end">
-            <h1 className={classname}>Dota search</h1>
+        <Stack direction={"row"} spacing={3} justifyContent={"space-between"}>
+            <h2 className={classname}>Dota search</h2>
             <FilterPanel itemType={itemType} onMMRChange={onMMRChange} onPositionChange={onPositionChange}/>
-            <h2 className='d-flex'>{messages} messages, {commands} commands, {players} players</h2>
-        </div>
+            <h5 className='d-flex justify-content-end'>{messages} messages, {commands} commands, {players} players</h5>
+        </Stack>
     );
 };
 

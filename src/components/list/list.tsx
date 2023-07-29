@@ -2,6 +2,7 @@ import ListItem from '../list-item';
 import './list.css';
 import Loader from '../common/loader';
 import {FIXMELATER} from "../../shared/Constants";
+import {Card, Divider, Stack, Grid} from "@mui/material";
 
 
 const List = (props: FIXMELATER) => {
@@ -20,19 +21,30 @@ const List = (props: FIXMELATER) => {
     }).map((item: FIXMELATER) => {
         const {key, ...itemProps} = item;
         return (
-            <li key={key} className="list-group-item">
+            <Grid item className="list-group-item">
                 <ListItem
                     {...itemProps}
                 />
-            </li>
+            </Grid>
+            // <li key={key} className="list-group-item">
+            //     <ListItem
+            //         {...itemProps}
+            //     />
+            // </li>
         );
     });
 
     return (
         // @ts-ignore
-        <ul className="list-group list">
-            {elements}
-        </ul>
+    <Grid container alignItems="stretch" direction="column" className="list">
+        {elements}
+    </Grid>
+    // <Grid container alignItems="stretch" className="list-group list" divider={<Divider orientation="horizontal" flexItem />}>
+    //     {elements}
+    // </Grid>
+        // <Stack className="list-group list" divider={<Divider orientation="horizontal" flexItem />}>
+        //     {elements}
+        // </Stack>
     );
 };
 

@@ -1,9 +1,8 @@
 import {useCallback, useState} from 'react';
 import './item-add.css';
 import {ItemType} from '../../shared';
-import Modal from '../common/modal';
-import AddPlayerForm from './add-player-form/AddPlayerForm';
 import {FIXMELATER} from "../../shared/Constants";
+import {CommandModal, PlayerModal} from "./Modals";
 
 // Контроллер модалки с кнопкой активации
 export const ItemAdd = (props: { onAddPlayer: (q:FIXMELATER)=>void; itemType: FIXMELATER; onAddCommand: (q:FIXMELATER)=>void;}) => {
@@ -21,42 +20,16 @@ export const ItemAdd = (props: { onAddPlayer: (q:FIXMELATER)=>void; itemType: FI
     if (itemType === ItemType.MESSAGE) return (<div/>);
     if (itemType === ItemType.COMMAND)
         return (
-            <div className="col">
-                <div className="item-add-form d-flex row">
-                    <button
-                        className="item-add-form btn btn-secondary btn-lg btn-block"
-                        onClick={() => {
-                            setModalActive(true);
-                        }}
-                    >
-                        Find {ItemType.PLAYER}
-                    </button>
-                </div>
-                <Modal active={modalActive} setActive={setModalActive}>
-                    <AddPlayerForm
-                        onAddCommand={onSubmitCommand} isPlayer={false}
-                    />
-                </Modal>
-            </div>
+            // @ts-ignore
+            <CommandModal onClick={() => {
+                setModalActive(true);
+            }} active={modalActive} active1={setModalActive} onAddCommand={onSubmitCommand}/>
         );
 
     return (
-        <div className="col">
-            <div className="item-add-form d-flex row">
-                <button
-                    className="item-add-form btn btn-secondary btn-lg btn-block"
-                    onClick={() => {
-                        setModalActive(true);
-                    }}
-                >
-                    Find {ItemType.COMMAND}
-                </button>
-            </div>
-            <Modal active={modalActive} setActive={setModalActive}>
-                <AddPlayerForm
-                    onAddPlayer={onSubmitPlayer} isPlayer={true}
-                />
-            </Modal>
-        </div>
+        // @ts-ignore
+        <PlayerModal onClick={() => {
+            setModalActive(true);
+        }} active={modalActive} active1={setModalActive} onAddPlayer={onSubmitPlayer}/>
     );
 };
