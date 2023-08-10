@@ -1,3 +1,4 @@
+// @ts-ignore
 import {Slider} from "@mui/material";
 import * as React from "react";
 import {FIXMELATER} from "../../../shared/Constants";

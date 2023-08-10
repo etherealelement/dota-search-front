@@ -3,11 +3,14 @@ import './app.css';
 import DotaSearchService from '../../services/DotaSearchService';
 import {getId, ItemType, Player} from '../../shared';
 import {FIXMELATER} from "../../shared/Constants";
+// @ts-ignore
 import {ThemeProvider} from '@mui/material/styles';
+// @ts-ignore
 import CssBaseline from '@mui/material/CssBaseline';
 import {darkTheme} from "../common/app/theme";
 import {AppRoot} from "../common/Root/appRoot";
 import {Filter} from "../../shared/Types";
+import React from 'react';
 
 export default class App extends Component {
     state = {

@@ -1,7 +1,9 @@
 import './CommandCard.css';
 import {Positions} from "../../../shared";
 import {toPositions} from "../../common/icons/positions";
+// @ts-ignore
 import {Stack} from "@mui/material";
+import React from 'react';
 
 
 export class CommandCardProps {

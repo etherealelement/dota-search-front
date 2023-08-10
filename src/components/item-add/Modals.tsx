@@ -1,3 +1,4 @@
+import React from "react";
 import {FIXMELATER, ItemType} from "../../shared/Constants";
 import Modal from "../common/modal";
 import AddPlayerForm from "./add-player-form/AddPlayerForm";
@@ -16,7 +17,7 @@ export function CommandModal(props: { onClick: () => void, active: boolean, acti
         <Modal active={props.active} setActive={props.active1}>
             <AddPlayerForm
                 onAddCommand={props.onAddCommand} isPlayer={false}
-            />
+             onAddPlayer={null}/>
         </Modal>
     </div>;
 }
@@ -35,7 +36,7 @@ export function PlayerModal(props: { onClick: () => void, active: boolean, activ
         <Modal active={props.active} setActive={props.active1}>
             <AddPlayerForm
                 onAddPlayer={props.onAddPlayer} isPlayer={true}
-            />
+             onAddCommand={null}/>
         </Modal>
     </div>;
 }
