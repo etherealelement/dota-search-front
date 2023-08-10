@@ -1,7 +1,9 @@
 import './player.css';
 import {Positions} from "../../../shared";
 import {toPositions} from "../../common/icons/positions";
-import {Card, Link, Stack} from "@mui/material";
+// @ts-ignore
+import { Stack} from "@mui/material";
+import React from 'react';
 
 
 export class PlayerProps {

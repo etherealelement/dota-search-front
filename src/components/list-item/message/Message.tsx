@@ -1,3 +1,4 @@
+import React from 'react';
 import './Message.css';
 
 export class MessageProps {
@@ -9,12 +10,11 @@ export class MessageProps {
 
 const Message = (props: MessageProps) => {
     return (
-        // @ts-ignore
         <div className="row-cols-sm-1 container-fluid list-item list-group-item">
             <div className="col">
-          <span className="list-item-label float-lg-start">
-            {props.Data}
-          </span>
+                <span className="list-item-label float-lg-start">
+                    {props.Data}
+                </span>
             </div>
             <div className="col float-right">
                 <div className="row float-lg-end">

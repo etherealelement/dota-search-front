@@ -1,5 +1,6 @@
 import './search-panel.css';
 import {FIXMELATER} from "../../shared/Constants";
+import React from 'react';
 
 const SearchPanel = (props: FIXMELATER) => {
     const {onChangeSearch, search} = props;

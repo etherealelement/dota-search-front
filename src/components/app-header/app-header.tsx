@@ -1,7 +1,9 @@
 import './app-header.css';
 import FilterPanel from "../filter-panel";
 import {FIXMELATER} from "../../shared/Constants";
+// @ts-ignore
 import { Stack } from '@mui/material';
+import React from 'react';
 
 export class AppHeaderProps{
     itemType:string = 'command'
@@ -15,9 +17,7 @@ export class AppHeaderProps{
 const AppHeader = (props: AppHeaderProps) => {
     const {itemType, onMMRChange,onPositionChange,players, commands, messages} = props;
     const classname = itemType === 'message' ? itemType:'';
-    // @ts-ignore
     return (
-        // @ts-ignore
         <Stack direction={"row"} spacing={3} justifyContent={"space-between"}>
             <h2 className={classname}>Dota search</h2>
             <FilterPanel itemType={itemType} onMMRChange={onMMRChange} onPositionChange={onPositionChange}/>

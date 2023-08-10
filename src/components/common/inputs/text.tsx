@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {getId} from '../../../shared';
 import {FIXMELATER} from "../../../shared/Constants";
+import React from 'react';
 
 export const TextInput = (props: { name: string; player: FIXMELATER; placeholder: FIXMELATER; onChange: FIXMELATER; }) => {
     const {name, player, placeholder, onChange} = props;

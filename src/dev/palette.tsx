@@ -6,6 +6,7 @@ import {
     Variant,
     Palette,
 } from "@react-buddy/ide-toolbox";
+// @ts-ignore
 import MUIPalette from "@react-buddy/palette-mui";
 
 export const PaletteTree = () => (

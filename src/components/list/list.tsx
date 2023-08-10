@@ -1,13 +1,13 @@
 import ListItem from '../list-item';
 import './list.css';
-import Loader from '../common/loader';
 import {FIXMELATER} from "../../shared/Constants";
-import {Card, Divider, Stack, Grid} from "@mui/material";
+// @ts-ignore
+import {Grid} from "@mui/material";
+import React from 'react';
 
 
 const List = (props: FIXMELATER) => {
     const {items, loaded} = props;
-    // @ts-ignore
     if (!loaded ) return;
 
     // @ts-ignore

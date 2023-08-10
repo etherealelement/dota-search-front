@@ -2,6 +2,7 @@ import './list-item.css';
 import PlayerCard, {PlayerProps} from './player/PlayerCard';
 import Message, {MessageProps} from './message/Message';
 import CommandCard from "./command/CommandCard";
+import React from 'react';
 // import Command
 
 

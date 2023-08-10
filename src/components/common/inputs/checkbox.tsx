@@ -1,8 +1,10 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {getId, Positions} from '../../../shared';
+// @ts-ignore
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt'; // no
 import {CheckBoxKeys, FIXMELATER} from "../../../shared/Constants";
+// @ts-ignore
 import {Checkbox, FormControlLabel} from "@mui/material";
 import PosToIcon from '../icons'
 

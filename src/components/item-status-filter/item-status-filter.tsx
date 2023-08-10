@@ -1,7 +1,7 @@
 import './item-status-filter.css';
 import {getId} from '../../shared';
 import {FIXMELATER} from "../../shared/Constants";
-import {MouseEventHandler} from "react";
+import React from 'react';
 
 const Button = (props: { filter: string; label: string; onClick: (p:{itemType:string}) => void; }) => {
     const {filter, label, onClick} = props;

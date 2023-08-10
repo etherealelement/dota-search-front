@@ -3,6 +3,7 @@ import './item-add.css';
 import {ItemType} from '../../shared';
 import {FIXMELATER} from "../../shared/Constants";
 import {CommandModal, PlayerModal} from "./Modals";
+import React from 'react';
 
 // Контроллер модалки с кнопкой активации
 export const ItemAdd = (props: { onAddPlayer: (q:FIXMELATER)=>void; itemType: FIXMELATER; onAddCommand: (q:FIXMELATER)=>void;}) => {

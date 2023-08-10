@@ -1,6 +1,7 @@
 import {POSITIONS, Positions} from "../../shared";
 import * as React from "react";
 import {useCallback, useState} from "react";
+// @ts-ignore
 import {FormGroup} from '@mui/material';
 import {CheckboxesFromPositions, CheckboxesFromPositionsNoText} from "../common/inputs/checkbox";
 import {MySlider} from "../common/inputs/my-slider";
