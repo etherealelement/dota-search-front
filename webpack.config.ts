@@ -1,14 +1,13 @@
 import HtmlWebpackPlugin from "html-webpack-plugin";
-
-const stylesHandler = 'style-loader';
-
 import path from 'path';
 import webpack from 'webpack';
 // in case you run into any typescript error when configuring `devServer`
 import 'webpack-dev-server';
 
+const stylesHandler = 'style-loader';
+
 const config: webpack.Configuration  = {
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',
@@ -27,17 +26,22 @@ const config: webpack.Configuration  = {
     ],
     module: {
         rules: [
+            // {
+            //     test: /\.(ts|tsx)$/i,
+            //     loader: 'ts-loader',
+            //     exclude: ['/node_modules/'],
+            // },
+            // {
+            //     test: /\.(js|jsx)$/,
+            //     exclude: /node_modules/,
+            //     use: {
+            //         loader: 'babel-loader',
+            //     },
+            // },
             {
-                test: /\.(ts|tsx)$/i,
-                loader: 'ts-loader',
+                test: /\.(ts|tsx|js|jsx)$/i,
+                loader: 'swc-loader',
                 exclude: ['/node_modules/'],
-            },
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                },
             },
             {
                 test: /\.css$/i,
