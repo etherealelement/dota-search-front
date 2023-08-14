@@ -1,0 +1,75 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.modal {
+  background: url("./images/modal-third.jpg")  no-repeat;
+  padding: 30px 20px;
+  width: 50%;
+  transition: all .2s ease-in-out;
+  border-radius: 20px;
+}
+
+.modal__inner {
+  padding: 20px;
+}
+
+.modal__form_box{
+  display: flex;
+  flex-direction: column;
+  gap: 20px
+}
+
+.modal__form_switches {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.modal__form_switches_item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal__form_switches_item p{
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  padding: 0;
+}
+
+.button__inner {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal__form{
+  position: relative;
+}
+
+.modal__form_close {
+  cursor: pointer;
+  position: absolute;
+  top: -50px;
+  right: -37px;
+}
+
+.overlay__hidden {
+  display: none;
+}
