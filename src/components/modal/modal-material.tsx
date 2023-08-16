@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {FC, memo} from 'react';
 import styles from "./modal-material.module.css";
 import {ModalMaterialProps} from "./modal-material.props";
@@ -12,18 +12,20 @@ export const ModalMaterial: FC<ModalMaterialProps> = memo(({
                                                            }: ModalMaterialProps): JSX.Element => {
 
     const [visiblePopup, setVisiblePopup] = useState<boolean>(true)
-
-
-    // Закрытие попапа
-    const togglePopup = ():void => {
+    const ref = useRef(null);
+    
+    
+    console.log(ref.current)
+    const togglePopup = (e:React.MouseEvent<HTMLDivElement>):void => {
+        if (ref.current) setVisiblePopup(true)
         setVisiblePopup(item => !item)
     }
 
 
     return <div className={cn(styles.overlay, {
         [styles.overlay__hidden]: !visiblePopup
-    })}>
-        <div className={styles.modal}>
+    })} onClick={togglePopup}>
+        <div className={styles.modal} ref={ref} onClick={e => e.stopPropagation()}>
             <div className={styles.modal__inner}>
                 <form className={styles.modal__form}>
                     <div className={styles.modal__form_box}>
@@ -57,15 +59,15 @@ export const ModalMaterial: FC<ModalMaterialProps> = memo(({
                                 <p>Carry</p>
                                 <Switch defaultChecked color="error"></Switch>
                             </label>
+                        <label className={styles.modal__form_switches_item}>
+                            <p>Hardline</p>
+                            <Switch defaultChecked color="default"></Switch>
+                        </label>
                     </div>
 
                     <div className={styles.button__inner}>
                         <Button variant="contained">Подтвердить</Button>
                     </div>
-
-                    <span className={styles.modal__form_close} onClick={togglePopup}>
-                        <svg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><path d="M38 12.83l-2.83-2.83-11.17 11.17-11.17-11.17-2.83 2.83 11.17 11.17-11.17 11.17 2.83 2.83 11.17-11.17 11.17 11.17 2.83-2.83-11.17-11.17z"/><path d="M0 0h48v48h-48z" fill="none"/></svg>
-                    </span>
                 </form>
             </div>
         </div>

@@ -9,10 +9,13 @@ import React from 'react';
 export const ItemAdd = (props: { onAddPlayer: (q:FIXMELATER)=>void; itemType: FIXMELATER; onAddCommand: (q:FIXMELATER)=>void;}) => {
     const [modalActive, setModalActive] = useState(false);
     const {onAddPlayer, itemType, onAddCommand} = props;
+
+    
     const onSubmitPlayer = useCallback((v: FIXMELATER) => {
         onAddPlayer(v);
         setModalActive(false);
     }, [onAddPlayer]);
+
     const onSubmitCommand = useCallback((v: FIXMELATER) => {
         onAddCommand(v);
         setModalActive(false);
